@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/evenh/intercert/internal/cmd"
+	"github.com/evenh/intercert/cmd"
 )
 
 func main() {
