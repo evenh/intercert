@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -36,6 +38,10 @@ var serverCmd = &cobra.Command{
 			Domains:     viper.GetStringSlice("server.domains"),
 			Email:       viper.GetString("server.email"),
 			Storage:     viper.GetString("server.storage"),
+		}
+
+		if !c.Agree {
+			printErrorAndExit(errors.New("the ACME ToS must be agreed to"))
 		}
 
 		fmt.Printf("Will start server on port %v", c.Port)
