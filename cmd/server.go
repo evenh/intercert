@@ -41,7 +41,7 @@ var serverCmd = &cobra.Command{
 		}
 
 		if !c.Agree {
-			printErrorAndExit(errors.New("the ACME ToS must be agreed to"))
+			PrintErrorAndExit(errors.New("the ACME ToS must be agreed to"))
 		}
 
 		fmt.Printf("Will start server on port %v", c.Port)

@@ -41,13 +41,13 @@ func initConfig() {
 
 	// Try to read config
 	if err := viper.ReadInConfig(); err != nil {
-		printErrorAndExit(err)
+		PrintErrorAndExit(err)
 	}
 }
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		printErrorAndExit(err)
+		PrintErrorAndExit(err)
 	}
 }
 
@@ -55,7 +55,7 @@ func constructDir() string {
 	// Find home directory.
 	home, err := homedir.Dir()
 	if err != nil {
-		printErrorAndExit(err)
+		PrintErrorAndExit(err)
 	}
 
 	return home + "/.intercert"

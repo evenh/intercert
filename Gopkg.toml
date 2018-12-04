@@ -18,3 +18,7 @@
 [[constraint]]
   name = "github.com/mitchellh/go-homedir"
   version = "1.0.0"
+
+[[constraint]]
+  name = "google.golang.org/grpc"
+  version = "1.16.0"

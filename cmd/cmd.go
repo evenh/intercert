@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func printErrorAndExit(err error) {
+func PrintErrorAndExit(err error) {
 	fmt.Println(err)
 	os.Exit(1)
 }
@@ -16,7 +16,7 @@ func bindPrefixedFlag(cmd *cobra.Command, prefix string, key string) {
 	err := viper.BindPFlag(prefix+"."+key, cmd.PersistentFlags().Lookup(key))
 
 	if err != nil {
-		printErrorAndExit(err)
+		PrintErrorAndExit(err)
 	}
 }
 

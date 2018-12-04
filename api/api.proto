@@ -1,0 +1,19 @@
+syntax = "proto3";
+package api;
+
+// Request for a certificate to be issued
+message CertificateRequest {
+    // Example: foo.bar.com
+    string dnsName = 1;
+}
+
+// A successful response containing a issued certificate
+message CertificateResponse {
+    // A blob containing the raw cert
+    bytes certificatePayload = 1;
+}
+
+service CertificateIssuer {
+    rpc IssueCert (CertificateRequest) returns (CertificateResponse) {
+    }
+}
