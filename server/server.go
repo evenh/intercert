@@ -1,19 +1,31 @@
 package server
 
 import (
-	"context"
 	"github.com/evenh/intercert/api"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+	"log"
+	"net"
+	"strconv"
 )
 
-type Actuator struct{}
+func StartServer(port int) {
+	s := grpc.NewServer()
 
-func (Actuator) Ping(context.Context, *api.PingMessage) (*api.PingMessage, error) {
-	panic("implement me")
-}
+	issuerService := IssuerService{}
 
-type Bar struct{}
+	api.RegisterCertificateIssuerServer(s, issuerService)
 
-func (Bar) Ping(ctx context.Context, in *api.PingMessage, opts ...grpc.CallOption) (*api.PingMessage, error) {
-	panic("implement me")
+	ln, err := net.Listen("tcp", "0.0.0.0:"+strconv.Itoa(port))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// TODO: Remove after testing? Used for grpcui
+	reflection.Register(s)
+
+	if err := s.Serve(ln); err != nil {
+		log.Fatalf("failed to serve: %s", err)
+	}
 }

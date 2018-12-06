@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"github.com/evenh/intercert/server"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -44,6 +45,7 @@ var serverCmd = &cobra.Command{
 			PrintErrorAndExit(errors.New("the ACME ToS must be agreed to"))
 		}
 
-		fmt.Printf("Will start server on port %v", c.Port)
+		fmt.Printf("Listening on port %v\n", c.Port)
+		server.StartServer(c.Port)
 	},
 }
