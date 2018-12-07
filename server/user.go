@@ -3,6 +3,7 @@ package server
 import (
 	"crypto"
 	log "github.com/sirupsen/logrus"
+	"github.com/xenolf/lego/acme"
 	"github.com/xenolf/lego/registration"
 )
 
@@ -54,4 +55,37 @@ func (u AcmeUser) LoadOrCreatePrivateKey(storageDirectory string) crypto.Private
 	}
 
 	return u.key
+}
+
+func (u AcmeUser) LoadOrCreateRegistration(storageDirectory string, client *acme.Client) *registration.Resource {
+	if u.Registration == nil {
+		// Load existing one
+		existingReg, err := ReadRegistration(storageDirectory, u.Email)
+
+		if err != nil {
+			log.Info("No existing registration found - registering with ACME")
+			newReg, err := client.Registration.Register(true)
+
+			if err != nil {
+				log.Fatalf("Could not handle ACME registration: %v", err)
+				return nil
+			}
+
+			// Save private key
+			log.Info("Writing new registration")
+			err = WriteRegistration(storageDirectory, u.Email, newReg)
+
+			if err != nil {
+				panic(err)
+			}
+
+			log.Infof("Using the newly created registration")
+			return newReg
+		}
+
+		log.Infof("Loaded existing registration")
+		return existingReg
+	}
+
+	return u.Registration
 }

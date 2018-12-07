@@ -22,19 +22,28 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 	key := user.LoadOrCreatePrivateKey(config.Storage)
 	user.key = key
 
-	issuer.user = user
-
 	// Create client
-	clientConfig := acme.NewConfig(issuer.user)
+	log.Infof("Using directory server: %s", config.Directory)
+	clientConfig := acme.NewConfig(user)
 	clientConfig.CADirURL = config.Directory
-
 	client, err := acme.NewClient(clientConfig)
 
 	if err != nil {
-		log.Fatal("Could not construct new ACME client: %v", err)
-	} else {
-		issuer.client = client
+		log.Fatalf("Could not construct new ACME client: %v", err)
+		log.Exit(1)
 	}
+
+	// Handle registration
+	reg := user.LoadOrCreateRegistration(config.Storage, client)
+
+	if reg == nil {
+		log.Fatalf("Failed to obtain registration")
+		log.Exit(1)
+	}
+
+	user.Registration = reg
+	issuer.user = user
+	issuer.client = client
 
 	return issuer
 }
