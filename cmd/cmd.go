@@ -1,14 +1,14 @@
 package cmd
 
 import (
-	"fmt"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
 )
 
 func PrintErrorAndExit(err error) {
-	fmt.Println(err)
+	log.Fatal(err)
 	os.Exit(1)
 }
 

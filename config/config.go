@@ -1,4 +1,4 @@
-package cmd
+package config
 
 // A ServerConfig represents configuration for launching a server instance.
 type ServerConfig struct {

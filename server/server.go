@@ -2,21 +2,22 @@ package server
 
 import (
 	"github.com/evenh/intercert/api"
+	"github.com/evenh/intercert/config"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"log"
 	"net"
 	"strconv"
 )
 
-func StartServer(port int) {
+func StartServer(config *config.ServerConfig) {
 	s := grpc.NewServer()
 
-	issuerService := IssuerService{}
+	issuerService := NewIssuerService(config)
 
 	api.RegisterCertificateIssuerServer(s, issuerService)
 
-	ln, err := net.Listen("tcp", "0.0.0.0:"+strconv.Itoa(port))
+	ln, err := net.Listen("tcp", "0.0.0.0:"+strconv.Itoa(config.Port))
 
 	if err != nil {
 		log.Fatal(err)

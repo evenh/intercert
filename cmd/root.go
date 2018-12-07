@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/mitchellh/go-homedir"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -34,7 +34,7 @@ func initConfig() {
 
 	// Support dynamic reload
 	viper.OnConfigChange(func(e fsnotify.Event) {
-		fmt.Println("TODO: Configuration file changed:", e.Name)
+		log.Debug("Configuration file changed")
 	})
 
 	viper.WatchConfig()

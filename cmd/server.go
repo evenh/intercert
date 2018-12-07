@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
+	"github.com/evenh/intercert/config"
 	"github.com/evenh/intercert/server"
-
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -31,7 +31,7 @@ var serverCmd = &cobra.Command{
 	Long:  `Start the server component, doing the interaction with the ACME server and connected clients`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		c := ServerConfig{
+		c := config.ServerConfig{
 			Port:        viper.GetInt("server.port"),
 			Agree:       viper.GetBool("server.agree"),
 			Directory:   viper.GetString("server.directory"),
@@ -45,7 +45,8 @@ var serverCmd = &cobra.Command{
 			PrintErrorAndExit(errors.New("the ACME ToS must be agreed to"))
 		}
 
-		fmt.Printf("Listening on port %v\n", c.Port)
-		server.StartServer(c.Port)
+		log.Infof("Listening on port %v", c.Port)
+
+		server.StartServer(&c)
 	},
 }

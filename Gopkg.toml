@@ -2,10 +2,6 @@
   go-tests = true
   unused-packages = true
 
-#[[constraint]]
-#  name = "github.com/xenolf/lego"
-#  version = "1.0.1"
-
 # CLI interface
 [[constraint]]
   name = "github.com/spf13/cobra"
@@ -26,3 +22,11 @@
 [[constraint]]
   name = "google.golang.org/grpc"
   version = "1.16.0"
+
+[[constraint]]
+  name = "github.com/sirupsen/logrus"
+  version = "1.2.0"
+
+[[constraint]]
+  name = "github.com/xenolf/lego"
+  revision = "2add6910e6f2fbcf8542cb6ebde771f3260424fc"
