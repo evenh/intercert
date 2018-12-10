@@ -4,12 +4,11 @@ import (
 	"crypto"
 	log "github.com/sirupsen/logrus"
 	"github.com/xenolf/lego/acme"
-	"github.com/xenolf/lego/registration"
 )
 
 type AcmeUser struct {
 	Email        string
-	Registration *registration.Resource
+	Registration *acme.RegistrationResource
 	key          crypto.PrivateKey
 }
 
@@ -17,7 +16,7 @@ func (u AcmeUser) GetEmail() string {
 	return u.Email
 }
 
-func (u AcmeUser) GetRegistration() *registration.Resource {
+func (u AcmeUser) GetRegistration() *acme.RegistrationResource {
 	return u.Registration
 }
 
@@ -57,14 +56,14 @@ func (u AcmeUser) LoadOrCreatePrivateKey(storageDirectory string) crypto.Private
 	return u.key
 }
 
-func (u AcmeUser) LoadOrCreateRegistration(storageDirectory string, client *acme.Client) *registration.Resource {
+func (u AcmeUser) LoadOrCreateRegistration(storageDirectory string, client *acme.Client) *acme.RegistrationResource {
 	if u.Registration == nil {
 		// Load existing one
 		existingReg, err := ReadRegistration(storageDirectory, u.Email)
 
 		if err != nil {
 			log.Info("No existing registration found - registering with ACME")
-			newReg, err := client.Registration.Register(true)
+			newReg, err := client.Register(true)
 
 			if err != nil {
 				log.Fatalf("Could not handle ACME registration: %v", err)

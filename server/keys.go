@@ -10,7 +10,7 @@ import (
 	"encoding/pem"
 	"errors"
 	log "github.com/sirupsen/logrus"
-	"github.com/xenolf/lego/registration"
+	"github.com/xenolf/lego/acme"
 	"io/ioutil"
 	"strings"
 )
@@ -70,7 +70,7 @@ func WritePrivateKey(storageDirectory string, email string, key *rsa.PrivateKey)
 	return nil
 }
 
-func ReadRegistration(storageDirectory string, email string) (*registration.Resource, error) {
+func ReadRegistration(storageDirectory string, email string) (*acme.RegistrationResource, error) {
 
 
 	data, err := ioutil.ReadFile(storageDirectory + "/registration/" + encodeEmail(email))
@@ -79,7 +79,7 @@ func ReadRegistration(storageDirectory string, email string) (*registration.Reso
 		return nil, errors.New("could not find any existing registration for " + email)
 	}
 
-	var resource = registration.Resource{}
+	var resource = acme.RegistrationResource{}
 
 	err = json.Unmarshal(data, &resource)
 
@@ -90,7 +90,7 @@ func ReadRegistration(storageDirectory string, email string) (*registration.Reso
 	return &resource, nil
 }
 
-func WriteRegistration(storageDirectory string, email string, reg *registration.Resource) error {
+func WriteRegistration(storageDirectory string, email string, reg *acme.RegistrationResource) error {
 	data, err := json.Marshal(reg)
 
 	if err != nil {
