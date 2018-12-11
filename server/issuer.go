@@ -25,7 +25,7 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 	}
 
 	// Construct the new certmagic instance
-	magic := certmagic.New(certmagic.Config{
+	magic := certmagic.NewWithCache(IntercertCache(config), certmagic.Config{
 		CA:     config.Directory,
 		Email:  config.Email,
 		Agreed: config.Agree,
@@ -34,7 +34,6 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 		KeyType: certcrypto.RSA4096,
 		MustStaple: false,
 		DNSProvider: dnsProvider,
-		// TODO: Custom storage
 	})
 
 	issuer.client = magic
