@@ -4,9 +4,9 @@ import (
 	"errors"
 	"github.com/evenh/intercert/config"
 	"github.com/evenh/intercert/server"
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/xenolf/lego/log"
 )
 
 func init() {

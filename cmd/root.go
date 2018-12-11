@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"github.com/fsnotify/fsnotify"
 	"github.com/mitchellh/go-homedir"
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -31,13 +29,6 @@ func initConfig() {
 
 	// Search these paths for config file
 	viper.AddConfigPath(DefaultIntercertDir)
-
-	// Support dynamic reload
-	viper.OnConfigChange(func(e fsnotify.Event) {
-		log.Debug("Configuration file changed")
-	})
-
-	viper.WatchConfig()
 
 	// Try to read config
 	if err := viper.ReadInConfig(); err != nil {

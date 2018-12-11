@@ -3,7 +3,7 @@ package server
 import (
 	"github.com/evenh/intercert/api"
 	"github.com/evenh/intercert/config"
-	log "github.com/sirupsen/logrus"
+	"github.com/xenolf/lego/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"net"

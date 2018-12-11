@@ -4,57 +4,40 @@ import (
 	"context"
 	"github.com/evenh/intercert/api"
 	"github.com/evenh/intercert/config"
-	log "github.com/sirupsen/logrus"
-	"github.com/xenolf/lego/acme"
+	"github.com/mholt/certmagic"
+	"github.com/xenolf/lego/certcrypto"
+	"github.com/xenolf/lego/log"
 	"github.com/xenolf/lego/providers/dns"
 )
 
 type IssuerService struct {
-	user AcmeUser
-	client *acme.Client
+	client *certmagic.Config
 }
 
 func NewIssuerService(config *config.ServerConfig) *IssuerService {
 	issuer := new(IssuerService)
 
-	// User based on email and private key
-	user := AcmeUser {Email: config.Email}
-	key := user.LoadOrCreatePrivateKey(config.Storage)
-	user.key = key
-
-	// Create client
-	log.Infof("Using directory server: %s", config.Directory)
-	client, err := acme.NewClient(config.Directory, user, acme.RSA2048)
-
-	if err != nil {
-		log.Fatalf("Could not construct new ACME client: %v", err)
-		log.Exit(1)
-	}
-
-	// Configure DNS provider
-	provider, err:= dns.NewDNSChallengeProviderByName(config.DnsProvider)
+	// Configure DNS provider by delegating to xenolf/lego factory
+	dnsProvider, err:= dns.NewDNSChallengeProviderByName(config.DnsProvider)
 
 	if err != nil {
 		log.Fatalf("Could not configure DNS provider: %v", err)
 	}
 
-	// Remove other challenges
-	client.ExcludeChallenges([]acme.Challenge{ acme.HTTP01, acme.TLSALPN01 })
+	// Construct the new certmagic instance
+	magic := certmagic.New(certmagic.Config{
+		CA:     config.Directory,
+		Email:  config.Email,
+		Agreed: config.Agree,
+		DisableHTTPChallenge: true,
+		DisableTLSALPNChallenge: true,
+		KeyType: certcrypto.RSA4096,
+		MustStaple: false,
+		DNSProvider: dnsProvider,
+		// TODO: Custom storage
+	})
 
-	// Only use DNS challenge
-	_ = client.SetChallengeProvider(acme.DNS01, provider)
-
-	// Handle registration
-	reg := user.LoadOrCreateRegistration(config.Storage, client)
-
-	if reg == nil {
-		log.Fatalf("Failed to obtain registration")
-		log.Exit(1)
-	}
-
-	user.Registration = reg
-	issuer.user = user
-	issuer.client = client
+	issuer.client = magic
 
 	return issuer
 }
@@ -62,17 +45,18 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateRequest) (*api.CertificateResponse, error) {
 	// TODO: Validate auth in context
 
-	certificates, err := s.client.ObtainCertificate([]string{ req.DnsName }, true, nil, false)
+	err := s.client.Manage([]string{ req.DnsName })
 
 	if err != nil {
 		log.Warnf("Failed to obtain certificate: %v", err)
 		return nil, err
 	}
 
-	log.Infof("Received payload: %#v", certificates)
+	cert, err := s.client.CacheManagedCertificate(req.DnsName)
 
-	response := &api.CertificateResponse{CertificatePayload: certificates.Certificate}
+	log.Infof("[%s] Received payload: %#v", req.DnsName, cert)
+
+	response := &api.CertificateResponse{CertificatePayload: []byte{} }
 
 	return response, nil
 }
-

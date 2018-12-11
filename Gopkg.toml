@@ -23,25 +23,11 @@
   name = "google.golang.org/grpc"
   version = "1.16.0"
 
-[[constraint]]
-  name = "github.com/sirupsen/logrus"
-  version = "1.2.0"
-
-# TODO: Revisit when lego is > 1.2.1
+# TODO: Revisit when xenolf/lego is > 1.2.1
 [[override]]
   name = "github.com/jmespath/go-jmespath"
   revision = "c2b33e84"
 
-# TODO: Revisit when lego is > 1.2.1
-[[override]]
-  name = "github.com/miekg/dns"
-  version = "=1.0.8"
-
-# TODO: Revisit when lego is > 1.2.1
-[[override]]
-  name = "github.com/dnsimple/dnsimple-go"
-  revision = "35bcc6b47c20ec9bf3a53adcb7fa9665a75f0e7b"
-
 [[constraint]]
-  name = "github.com/xenolf/lego"
-  version = "1.2.1"
+  branch = "master"
+  name = "github.com/mholt/certmagic"
