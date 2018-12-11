@@ -44,6 +44,8 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateRequest) (*api.CertificateResponse, error) {
 	// TODO: Validate auth in context
 
+	log.Infof("[%s] Received certificate request from client", req.DnsName)
+
 	err := s.client.Manage([]string{ req.DnsName })
 
 	if err != nil {
