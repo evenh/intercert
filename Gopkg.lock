@@ -381,11 +381,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:4e770399187c707b082f45324d10c6b7250e3cb14acce0e2bee3c2d3a7a85ef8"
+  digest = "1:3b6d879ad8ecf07d282128117d953f6df5e36f8bfdb2ea264bc7ad250398ed59"
   name = "github.com/mholt/certmagic"
   packages = ["."]
   pruneopts = "UT"
-  revision = "4dd0c62355ec3c3732f18c506449fc9b5f9f4c59"
+  revision = "9645f8e0e41c877ce99013b87602776a44bd1085"
 
 [[projects]]
   digest = "1:702ff5d8a0196ccb0627f35996efd1081be00c8ae1719402adbffc6e0f8f59ac"
@@ -915,6 +915,7 @@
     "github.com/golang/protobuf/proto",
     "github.com/mholt/certmagic",
     "github.com/mitchellh/go-homedir",
+    "github.com/pkg/errors",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
     "github.com/xenolf/lego/certcrypto",
