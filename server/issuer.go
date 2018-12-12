@@ -43,6 +43,8 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 	whitelist := NewWhitelist(config.Domains)
 	issuer.whitelist = whitelist
 
+	log.Infof("Certificate issuer service configured")
+
 	return issuer
 }
 
