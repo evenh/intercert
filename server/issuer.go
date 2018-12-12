@@ -18,7 +18,7 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 	issuer := new(IssuerService)
 
 	// Configure DNS provider by delegating to xenolf/lego factory
-	dnsProvider, err:= dns.NewDNSChallengeProviderByName(config.DnsProvider)
+	dnsProvider, err := dns.NewDNSChallengeProviderByName(config.DnsProvider)
 
 	if err != nil {
 		log.Fatalf("Could not configure DNS provider: %v", err)
@@ -26,14 +26,14 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 
 	// Construct the new certmagic instance
 	magic := certmagic.NewWithCache(IntercertCache(config), certmagic.Config{
-		CA:     config.Directory,
-		Email:  config.Email,
-		Agreed: config.Agree,
-		DisableHTTPChallenge: true,
+		CA:                      config.Directory,
+		Email:                   config.Email,
+		Agreed:                  config.Agree,
+		DisableHTTPChallenge:    true,
 		DisableTLSALPNChallenge: true,
-		KeyType: certcrypto.RSA4096,
-		MustStaple: false,
-		DNSProvider: dnsProvider,
+		KeyType:                 certcrypto.RSA4096,
+		MustStaple:              false,
+		DNSProvider:             dnsProvider,
 	})
 
 	issuer.client = magic
@@ -46,7 +46,7 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateReques
 
 	log.Infof("[%s] Received certificate request from client", req.DnsName)
 
-	err := s.client.Manage([]string{ req.DnsName })
+	err := s.client.Manage([]string{req.DnsName})
 
 	if err != nil {
 		log.Warnf("Failed to obtain certificate: %v", err)
@@ -57,7 +57,7 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateReques
 
 	log.Infof("[%s] Received payload: %#v", req.DnsName, cert)
 
-	response := &api.CertificateResponse{CertificatePayload: []byte{} }
+	response := &api.CertificateResponse{CertificatePayload: []byte{}}
 
 	return response, nil
 }

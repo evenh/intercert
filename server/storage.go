@@ -10,7 +10,7 @@ import (
 // or less the same as provided by certmagic, but customized to save to
 // directory provided in the configuration.
 func IntercertCache(config *config.ServerConfig) *certmagic.Cache {
-	var storage = createStorage(config.Storage);
+	var storage = createStorage(config.Storage)
 	log.Infof("Using directory %s for storage", config.Storage)
 
 	return createCache(storage)
