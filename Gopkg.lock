@@ -139,6 +139,14 @@
   version = "v1.16.2"
 
 [[projects]]
+  branch = "master"
+  digest = "1:0e29b30c96f33bc5668f44af752f255a80bdd073e7f0b9b69eaeab3bc1a8c76c"
+  name = "github.com/bobesa/go-domain-util"
+  packages = ["domainutil"]
+  pruneopts = "UT"
+  revision = "1d708c097a6a59a3e6432affc53cf41808b35c8b"
+
+[[projects]]
   digest = "1:65b0d980b428a6ad4425f2df4cd5410edd81f044cf527bd1c345368444649e58"
   name = "github.com/census-instrumentation/opencensus-proto"
   packages = [
@@ -903,6 +911,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/bobesa/go-domain-util/domainutil",
     "github.com/golang/protobuf/proto",
     "github.com/mholt/certmagic",
     "github.com/mitchellh/go-homedir",

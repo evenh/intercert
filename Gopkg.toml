@@ -31,3 +31,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/mholt/certmagic"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/bobesa/go-domain-util"

@@ -12,6 +12,7 @@ import (
 
 type IssuerService struct {
 	client *certmagic.Config
+	whitelist Whitelist
 }
 
 func NewIssuerService(config *config.ServerConfig) *IssuerService {
@@ -38,6 +39,10 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 
 	issuer.client = magic
 
+	// Create our whitelist
+	whitelist := NewWhitelist(config.Domains)
+	issuer.whitelist = whitelist
+
 	return issuer
 }
 
@@ -46,7 +51,16 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateReques
 
 	log.Infof("[%s] Received certificate request from client", req.DnsName)
 
-	err := s.client.Manage([]string{req.DnsName})
+	// Check whitelist
+	err := s.whitelist.isDnsNameAllowed(req.DnsName)
+
+	if err != nil {
+		log.Warnf("[%s] Request rejected: %v", req.DnsName, err)
+		return nil, err
+	}
+
+	// Hand over to certmagic
+	err = s.client.Manage([]string{req.DnsName})
 
 	if err != nil {
 		log.Warnf("Failed to obtain certificate: %v", err)
