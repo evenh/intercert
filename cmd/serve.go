@@ -27,7 +27,7 @@ func init() {
 
 var serveCmd = &cobra.Command{
 	Use:   "serve",
-	Short: "The server doing the actual work",
+	Short: "Start a server instance",
 	Long:  `Start the server component, doing the interaction with the ACME server and connected clients`,
 	Run: func(cmd *cobra.Command, args []string) {
 
