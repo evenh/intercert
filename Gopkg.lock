@@ -340,6 +340,14 @@
   version = "1.0.1"
 
 [[projects]]
+  digest = "1:2d643962fac133904694fffa959bc3c5dcfdcee38c6f5ffdd99a3c93eb9c835c"
+  name = "github.com/klauspost/cpuid"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "e7e905edc00ea8827e58662220139109efea09db"
+  version = "v1.2.0"
+
+[[projects]]
   branch = "master"
   digest = "1:5870e81e8951f1b080d69341300d3c145916b494dbc693c9d12b5d745b3d27ec"
   name = "github.com/kolo/xmlrpc"
@@ -381,11 +389,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:3b6d879ad8ecf07d282128117d953f6df5e36f8bfdb2ea264bc7ad250398ed59"
+  digest = "1:1370bb6b51b65596fd10a84cad6c1e9d098ecf2cfa2c9039831866ec0e2678d1"
   name = "github.com/mholt/certmagic"
   packages = ["."]
   pruneopts = "UT"
-  revision = "9645f8e0e41c877ce99013b87602776a44bd1085"
+  revision = "f00a66c84e93c8db1982a4f00c9c4067ba7e2a42"
 
 [[projects]]
   digest = "1:702ff5d8a0196ccb0627f35996efd1081be00c8ae1719402adbffc6e0f8f59ac"
