@@ -9,11 +9,27 @@ message CertificateRequest {
 
 // A successful response containing a issued certificate
 message CertificateResponse {
-    // A blob containing the raw cert
-    bytes certificatePayload = 1;
+    // A blob containing the cert
+    string certificate = 1;
+    // A blob containing the private key
+    string privateKey = 2;
+    // The DNS names this certificate is valid for
+    repeated string names = 3;
+}
+
+// A request for ping
+message PingRequest {
+    string msg = 1;
+}
+
+// A response for ping
+message PingResponse {
+    string msg = 2;
 }
 
 service CertificateIssuer {
     rpc IssueCert (CertificateRequest) returns (CertificateResponse) {
+    }
+    rpc Ping (PingRequest) returns (PingResponse) {
     }
 }

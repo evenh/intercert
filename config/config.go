@@ -1,5 +1,10 @@
 package config
 
+import (
+	"strconv"
+	"time"
+)
+
 // Holds configuration that is required for running a server instance.
 type ServerConfig struct {
 	// Which port the server shall run on.
@@ -20,4 +25,29 @@ type ServerConfig struct {
 	// The location on disk to save certificates and other data
 	// that the server produces.
 	Storage string
+}
+
+// Holds configuration that is required for creating a client
+type ClientConfig struct {
+	// Which host shall the client connect to?
+	Hostname string
+	// Which port is the host listening on?
+	Port int
+	// The location on disk to save certificates and other data
+	// that the client receives.
+	Storage string
+	// The domains to request certs for
+	Domains []string
+	// How often to check for expired certificates
+	ExpiryCheckAt time.Duration
+	// How early before expiry shall certificates be renewed?
+	RenewalThreshold time.Duration
+}
+
+func (c *ClientConfig) GetDialAddr() string {
+	return c.Hostname + ":" + strconv.Itoa(c.Port)
+}
+
+func (c *ClientConfig) GetCertStorage() string {
+	return c.Storage + "/certs"
 }
