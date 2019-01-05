@@ -87,7 +87,8 @@ func configureTermination(backgroundJobs []Job) {
 		}
 
 		// Wait for completion of background jobs
-		for !IsJobsStopped(backgroundJobs) {}
+		for !IsJobsStopped(backgroundJobs) {
+		}
 
 		os.Exit(0)
 	}()
@@ -116,6 +117,6 @@ func configureTasks(config *config.ClientConfig, storage *CertStorage) []Job {
 	desiredCheck := *Register(ensureCertsFromConfig(storage, config.Domains), "Ensure configured domains is present", 8*time.Hour, true)
 
 	tasks = append(tasks, expiryCheck, desiredCheck)
-	
+
 	return tasks
 }

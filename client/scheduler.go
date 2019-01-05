@@ -80,7 +80,6 @@ func Register(f func(), name string, delay time.Duration, runImmediately bool) *
 	return &j
 }
 
-
 func IsJobsStopped(jobs []Job) bool {
 	for _, job := range jobs {
 		if job.started {
