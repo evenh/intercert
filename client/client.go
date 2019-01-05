@@ -10,7 +10,6 @@ import (
 	"os"
 	"os/signal"
 	"runtime"
-	"sync"
 	"syscall"
 	"time"
 )
@@ -51,9 +50,6 @@ func StartClient(config *config.ClientConfig) {
 
 	log.Infof("Successfully pinged intercert host")
 
-	// Wait group for graceful shutdown
-	wg := sync.WaitGroup{}
-
 	// Create storage for saving/loading certs
 	certStorage := NewCertStorage(config.GetCertStorage())
 
@@ -63,21 +59,18 @@ func StartClient(config *config.ClientConfig) {
 	}
 
 	// Set up scheduled tasks
-	tasks := configureTasks(config, &wg, certStorage)
+	tasks := configureTasks(config, certStorage)
 
 	// Handle termination
-	configureTermination(&wg, tasks)
+	configureTermination(tasks)
 
 	log.Infof("Client running - ready to work!")
-
-	// Start process by scanning for desired certs
-	ensureCertsFromConfig(certStorage, config.Domains)()
 
 	// Block forever
 	select {}
 }
 
-func configureTermination(wg *sync.WaitGroup, backgroundChannels []chan bool) {
+func configureTermination(backgroundJobs []Job) {
 	var gracefulStop = make(chan os.Signal)
 
 	signal.Notify(gracefulStop, syscall.SIGTERM)
@@ -89,12 +82,12 @@ func configureTermination(wg *sync.WaitGroup, backgroundChannels []chan bool) {
 		log.Infof("Waiting for background tasks to exit...")
 
 		// Tell all background jobs to exit
-		for i := range backgroundChannels {
-			backgroundChannels[i] <- true
+		for i := range backgroundJobs {
+			backgroundJobs[i].Stop()
 		}
 
 		// Wait for completion of background jobs
-		wg.Wait()
+		for !IsJobsStopped(backgroundJobs) {}
 
 		os.Exit(0)
 	}()
@@ -116,12 +109,13 @@ func validateConfig(c *config.ClientConfig) error {
 	return nil
 }
 
-func configureTasks(config *config.ClientConfig, wg *sync.WaitGroup, storage *CertStorage) []chan bool {
-	var tasks []chan bool
+func configureTasks(config *config.ClientConfig, storage *CertStorage) []Job {
+	var tasks []Job
 
-	expiryCheck := schedule(findExpiredCerts(config.RenewalThreshold), "Expired Certs watcher", config.ExpiryCheckAt, wg)
-	desiredCheck := schedule(ensureCertsFromConfig(storage, config.Domains), "Ensure configured domains is present", 8*time.Hour, wg)
+	expiryCheck := *Register(findExpiredCerts(config.RenewalThreshold), "Expired certs watcher", config.ExpiryCheckAt, false)
+	desiredCheck := *Register(ensureCertsFromConfig(storage, config.Domains), "Ensure configured domains is present", 8*time.Hour, true)
 
 	tasks = append(tasks, expiryCheck, desiredCheck)
+	
 	return tasks
 }
