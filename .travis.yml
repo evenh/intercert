@@ -3,6 +3,16 @@ language: go
 go:
   - "1.11.x"
 
+install:
+  # protoc
+  - mkdir -p $HOME/protobuf && pushd $HOME/protobuf
+    && curl -LO 'https://github.com/google/protobuf/releases/download/v3.6.1/protoc-3.6.1-linux-x86_64.zip'
+    && unzip protoc-3.6.1-linux-x86_64.zip
+    && popd
+
+env:
+  - PATH=$HOME/protobuf/bin:$PATH
+
 # calls goreleaser
 deploy:
   - provider: script

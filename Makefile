@@ -1,6 +1,6 @@
 COMMIT := $(shell git rev-parse --short HEAD)
 
-all: deps proto build
+all: deps proto test build
 
 deps:
 	@ if ! which dep > /dev/null; then \
