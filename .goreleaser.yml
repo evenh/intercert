@@ -1,0 +1,56 @@
+project_name: intercert
+
+before:
+  hooks:
+    # Install dep and install dependencies
+    - go get -u -v github.com/golang/dep/cmd/dep
+    - dep ensure
+    # Re-generate gRPC stubs
+    - go get -u -v github.com/golang/protobuf/protoc-gen-go
+    - protoc -I api --go_out=plugins=grpc:api api/api.proto
+builds:
+- env:
+  - CGO_ENABLED=0
+  binary: intercert
+  ldflags:
+    - -s -w -X main.Version={{.Version}} -X main.Commit={{.ShortCommit}} -X main.BuiltAt={{.Date}}
+  goos:
+    - linux
+    - windows
+    - darwin
+  goarch:
+    - amd64
+    - arm64
+  goarm:
+    - 6
+    - 7
+  ignore:
+    - goos: darwin
+      goarch: arm64
+    - goos: darwin
+      goarch: i386
+    - goos: windows
+      goarch: arm64
+archive:
+  replacements:
+    darwin: macOS
+    linux: Linux
+    windows: Windows
+    amd64: x86_64
+  format: tar.gz
+  format_overrides:
+    - goos: windows
+      format: zip
+  files:
+    - LICENSE
+    - README.md
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-dev"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'

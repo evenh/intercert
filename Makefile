@@ -1,4 +1,6 @@
-all: test testrace
+COMMIT := $(shell git rev-parse --short HEAD)
+
+all: deps proto build
 
 deps:
 	@ if ! which dep > /dev/null; then \
@@ -7,9 +9,8 @@ deps:
 	fi
 	dep ensure
 
-build: deps \
-	   proto
-	go build github.com/evenh/intercert
+build:
+	go build -race -ldflags "-s -w -X main.Version=DEV-SNAPSHOT -X main.Commit=$(COMMIT)" -o dist/intercert github.com/evenh/intercert
 
 proto:
 	@ if ! which protoc > /dev/null; then \

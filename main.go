@@ -6,6 +6,12 @@ import (
 	"os"
 )
 
+var (
+	Version string
+	Commit string
+	BuiltAt string
+)
+
 func main() {
 	log.SetOutput(os.Stdout)
 

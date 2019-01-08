@@ -168,4 +168,7 @@ $RECYCLE.BIN/
 /vendor/
 /Godeps/
 
+# Goreleaser
+dist/
+
 # End of https://www.gitignore.io/api/linux,macos,windows,jetbrains+all
