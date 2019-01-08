@@ -32,6 +32,12 @@
   branch = "master"
   name = "github.com/mholt/certmagic"
 
+# For validating DNS/hostnames
 [[constraint]]
   branch = "master"
   name = "github.com/bobesa/go-domain-util"
+
+# Testing
+[[constraint]]
+  name = "github.com/stretchr/testify"
+  version = "1.2.2"
