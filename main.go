@@ -7,13 +7,15 @@ import (
 )
 
 var (
-	Version string
-	Commit string
-	BuiltAt string
+	Version = "DEV-SNAPSHOT"
+	Commit  = "N/A"
 )
 
 func main() {
 	log.SetOutput(os.Stdout)
 
-	cmd.Execute()
+	cmd.Version = Version
+	cmd.Commit = Commit
+
+	cmd.Execute(Version, Commit)
 }

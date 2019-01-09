@@ -8,13 +8,14 @@ import (
 
 var (
 	DefaultIntercertDir = constructDir()
+	Version             string
+	Commit              string
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "intercert",
-	Short:   "intercert - Let's Encrypt on LAN",
-	Long:    `Fetches ACME certificates in locked down environments by using DNS validation`,
-	Version: `X.X.X`,
+	Use:   "intercert",
+	Short: "intercert - Let's Encrypt on LAN",
+	Long:  `Fetches ACME certificates in locked down environments by using DNS validation`,
 }
 
 func init() {
@@ -36,7 +37,10 @@ func initConfig() {
 	}
 }
 
-func Execute() {
+func Execute(version string, commit string) {
+	Version = version
+	Commit = commit
+
 	if err := rootCmd.Execute(); err != nil {
 		PrintErrorAndExit(err)
 	}
