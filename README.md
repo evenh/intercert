@@ -1,4 +1,4 @@
-# intercert
+# intercert [![Build Status](https://travis-ci.org/evenh/intercert.svg?branch=master)](https://travis-ci.org/evenh/intercert)
 
 _Brings Let's Encrypt to LAN and other locked down environments._
 
