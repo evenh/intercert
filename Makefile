@@ -1,6 +1,6 @@
 COMMIT := $(shell git rev-parse --short HEAD)
 
-all: deps proto test build
+all: clean deps proto test build
 
 deps:
 	@ if ! which dep > /dev/null; then \
@@ -26,10 +26,9 @@ test:
 	go test -v -race -coverprofile=coverage.txt -covermode=atomic -cpu 1,4 github.com/evenh/intercert/...
 
 clean:
+	rm -rf ./dist
+	rm -f coverage.txt
 	go clean -i github.com/evenh/intercert/...
-
-coverage:
-	./coverage.sh --coveralls
 
 .PHONY: \
 	all \
@@ -37,5 +36,4 @@ coverage:
 	build \
 	proto \
 	test \
-	clean \
-	coverage
+	clean
