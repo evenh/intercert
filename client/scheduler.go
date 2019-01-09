@@ -1,8 +1,9 @@
 package client
 
 import (
-	"github.com/xenolf/lego/log"
 	"time"
+
+	"github.com/xenolf/lego/log"
 )
 
 // From https://github.com/KyleBanks/go-kit/blob/master/job/job.go

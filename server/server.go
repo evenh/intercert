@@ -1,13 +1,14 @@
 package server
 
 import (
+	"net"
+	"strconv"
+
 	"github.com/evenh/intercert/api"
 	"github.com/evenh/intercert/config"
 	"github.com/xenolf/lego/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"net"
-	"strconv"
 )
 
 func StartServer(config *config.ServerConfig) {

@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/evenh/intercert/cmd"
 	"log"
 	"os"
+
+	"github.com/evenh/intercert/cmd"
 )
 
 var (

@@ -1,10 +1,11 @@
 package cmd
 
 import (
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/xenolf/lego/log"
-	"os"
 )
 
 func PrintErrorAndExit(err error) {

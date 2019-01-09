@@ -1,8 +1,9 @@
 package client
 
 import (
-	"github.com/xenolf/lego/log"
 	"time"
+
+	"github.com/xenolf/lego/log"
 )
 
 // Find all expired certificates and ensure they are queued up for renewal

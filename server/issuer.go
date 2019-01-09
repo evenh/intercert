@@ -5,9 +5,12 @@ import (
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/rsa"
+
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
+	"strings"
+
 	"github.com/evenh/intercert/api"
 	"github.com/evenh/intercert/config"
 	"github.com/mholt/certmagic"
@@ -17,7 +20,6 @@ import (
 	"github.com/xenolf/lego/providers/dns"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
-	"strings"
 )
 
 type IssuerService struct {

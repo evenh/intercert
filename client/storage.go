@@ -1,14 +1,15 @@
 package client
 
 import (
-	"github.com/evenh/intercert/api"
-	"github.com/pkg/errors"
-	"github.com/xenolf/lego/log"
 	"os"
 	"path"
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/evenh/intercert/api"
+	"github.com/pkg/errors"
+	"github.com/xenolf/lego/log"
 )
 
 const (

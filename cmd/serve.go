@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+
 	"github.com/evenh/intercert/config"
 	"github.com/evenh/intercert/server"
 	"github.com/spf13/cobra"

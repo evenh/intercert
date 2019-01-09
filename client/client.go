@@ -3,15 +3,16 @@ package client
 import (
 	"context"
 	"errors"
-	"github.com/evenh/intercert/api"
-	"github.com/evenh/intercert/config"
-	"github.com/xenolf/lego/log"
-	"google.golang.org/grpc"
 	"os"
 	"os/signal"
 	"runtime"
 	"syscall"
 	"time"
+
+	"github.com/evenh/intercert/api"
+	"github.com/evenh/intercert/config"
+	"github.com/xenolf/lego/log"
+	"google.golang.org/grpc"
 )
 
 func StartClient(config *config.ClientConfig, userAgent string) {

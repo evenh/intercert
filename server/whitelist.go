@@ -1,10 +1,11 @@
 package server
 
 import (
+	"strings"
+
 	"github.com/bobesa/go-domain-util/domainutil"
 	"github.com/pkg/errors"
 	"github.com/xenolf/lego/log"
-	"strings"
 )
 
 // A whitelist holds valid domains that certificates can be

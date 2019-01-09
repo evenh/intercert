@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"fmt"
+
 	"github.com/evenh/intercert/api"
 	"github.com/xenolf/lego/log"
 )
