@@ -76,11 +76,16 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateReques
 	err = s.client.Manage([]string{req.DnsName})
 
 	if err != nil {
-		log.Warnf("Failed to obtain certificate: %v", err)
+		log.Warnf("[%s] Failed to obtain certificate: %v", req.DnsName, err)
 		return nil, err
 	}
 
 	cert, err := s.client.CacheManagedCertificate(req.DnsName)
+
+	if err != nil {
+		log.Warnf("[%s] Could not obtain certificate from ACME: %v", req.DnsName, err)
+		return nil, errors.New("Could not obtain certificate from ACME")
+	}
 
 	// PEM-encode private key
 	privateKey, err := pemEncodeKey(cert.PrivateKey)
