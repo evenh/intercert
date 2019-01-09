@@ -43,7 +43,7 @@ func (w Whitelist) isDNSNameAllowed(dnsName string) error {
 	topLevel := domainutil.Domain(dnsName)
 
 	if topLevel == "" {
-		return errors.New("Could not check whether " + dnsName + "is allowed")
+		return errors.New("Could not check whether " + dnsName + " is allowed")
 
 	}
 
