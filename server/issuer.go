@@ -22,16 +22,18 @@ import (
 	"google.golang.org/grpc/peer"
 )
 
+// IssuerService issues certificates to clients
 type IssuerService struct {
 	client    *certmagic.Config
 	whitelist Whitelist
 }
 
+// NewIssuerService constructs a new instance with a predefined config
 func NewIssuerService(config *config.ServerConfig) *IssuerService {
 	issuer := new(IssuerService)
 
 	// Configure DNS provider by delegating to xenolf/lego factory
-	dnsProvider, err := dns.NewDNSChallengeProviderByName(config.DnsProvider)
+	dnsProvider, err := dns.NewDNSChallengeProviderByName(config.DNSProvider)
 
 	if err != nil {
 		log.Fatalf("Could not configure DNS provider: %v", err)
@@ -60,6 +62,7 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 	return issuer
 }
 
+// IssueCert issues a certificate for a valid request
 func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateRequest) (*api.CertificateResponse, error) {
 	// TODO: Validate auth in context
 	logClient(ctx, "IssueCert("+req.DnsName+")")
@@ -67,7 +70,7 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateReques
 	log.Infof("[%s] Received certificate request from client", req.DnsName)
 
 	// Check whitelist
-	err := s.whitelist.isDnsNameAllowed(req.DnsName)
+	err := s.whitelist.isDNSNameAllowed(req.DnsName)
 
 	if err != nil {
 		log.Warnf("[%s] Request rejected: %v", req.DnsName, err)
@@ -116,6 +119,7 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateReques
 	return response, nil
 }
 
+// Ping is used to check that the service is alive
 func (s IssuerService) Ping(ctx context.Context, req *api.PingRequest) (*api.PingResponse, error) {
 	logClient(ctx, "Ping")
 	// TODO: Auth for ping?

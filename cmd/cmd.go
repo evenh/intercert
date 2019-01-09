@@ -8,6 +8,7 @@ import (
 	"github.com/xenolf/lego/log"
 )
 
+// PrintErrorAndExit logs a fatal error and exits the process with return code 1
 func PrintErrorAndExit(err error) {
 	log.Fatal(err)
 	os.Exit(1)

@@ -15,6 +15,7 @@ import (
 	"google.golang.org/grpc"
 )
 
+// StartClient starts a client instance with a client config and a user agent
 func StartClient(config *config.ClientConfig, userAgent string) {
 	log.Infof("Initializing client")
 

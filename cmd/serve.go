@@ -36,7 +36,7 @@ var serveCmd = &cobra.Command{
 			Port:        viper.GetInt("server.port"),
 			Agree:       viper.GetBool("server.agree"),
 			Directory:   viper.GetString("server.directory"),
-			DnsProvider: viper.GetString("server.dns-provider"),
+			DNSProvider: viper.GetString("server.dns-provider"),
 			Domains:     viper.GetStringSlice("server.domains"),
 			Email:       viper.GetString("server.email"),
 			Storage:     viper.GetString("server.storage"),

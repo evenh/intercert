@@ -8,13 +8,14 @@ import (
 	"github.com/xenolf/lego/log"
 )
 
-// A whitelist holds valid domains that certificates can be
+// Whitelist holds valid domains that certificates can be
 // issued under.
 type Whitelist struct {
 	// The top level domains to allow
 	domains []string
 }
 
+// NewWhitelist creates a new instance of the Whitelist struct
 func NewWhitelist(domains []string) Whitelist {
 	lowercasedDomains := make([]string, len(domains))
 
@@ -33,7 +34,7 @@ func NewWhitelist(domains []string) Whitelist {
 
 // Checks whether a DNS name (e.g. foo.bar.com) is allowed. If no domains is configured,
 // every DNS name will be allowed.
-func (w Whitelist) isDnsNameAllowed(dnsName string) error {
+func (w Whitelist) isDNSNameAllowed(dnsName string) error {
 	// Empty whitelists allows everything
 	if len(w.domains) == 0 {
 		return nil

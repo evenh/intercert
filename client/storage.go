@@ -17,10 +17,12 @@ const (
 	privateKey
 )
 
+// CertStorage represents where the certificates is stored at the client side
 type CertStorage struct {
 	storageDirectory string
 }
 
+// NewCertStorage constructs an instance of the CertStorage struct, with validation
 func NewCertStorage(storageDirectory string) *CertStorage {
 	if _, err := os.Stat(storageDirectory); os.IsNotExist(err) {
 		err = os.Mkdir(storageDirectory, 0777)
@@ -36,8 +38,8 @@ func NewCertStorage(storageDirectory string) *CertStorage {
 	}
 }
 
-func (c *CertStorage) ListCertsForDomains() ([]string, error) {
-	// TODO: Write real implementation
+// LocallyStoredDomains lists all domain names that has TLS certificates stored
+func (c *CertStorage) LocallyStoredDomains() ([]string, error) {
 	existingCerts, err := c.readCerts()
 
 	if err != nil {
@@ -49,6 +51,7 @@ func (c *CertStorage) ListCertsForDomains() ([]string, error) {
 	return existingCerts, nil
 }
 
+// Store certificates for a given API response and domain
 func (c *CertStorage) Store(domain string, response *api.CertificateResponse) error {
 	// Find disk locations
 	certFile, _ := c.absoluteFileName(domain, certificate)

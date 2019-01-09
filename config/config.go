@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-// Holds configuration that is required for running a server instance.
+// ServerConfig holds configuration that is required for running a server instance.
 type ServerConfig struct {
 	// Which port the server shall run on.
 	Port int
@@ -16,7 +16,7 @@ type ServerConfig struct {
 	Directory string
 	// The DNS provider that shall provide validation for
 	// ACME DNS challenges.
-	DnsProvider string
+	DNSProvider string
 	// Whitelisted top level domains - e.g.
 	// foo.com, bar.net.
 	Domains []string
@@ -27,7 +27,7 @@ type ServerConfig struct {
 	Storage string
 }
 
-// Holds configuration that is required for creating a client
+// ClientConfig holds configuration that is required for creating a client
 type ClientConfig struct {
 	// Which host shall the client connect to?
 	Hostname string
@@ -44,10 +44,12 @@ type ClientConfig struct {
 	RenewalThreshold time.Duration
 }
 
+// GetDialAddr gets the formatted address to dial a new gRPC connection
 func (c *ClientConfig) GetDialAddr() string {
 	return c.Hostname + ":" + strconv.Itoa(c.Port)
 }
 
+// GetCertStorage returns the location on disk for where to store certificates
 func (c *ClientConfig) GetCertStorage() string {
 	return c.Storage + "/certs"
 }

@@ -10,9 +10,12 @@ import (
 )
 
 var (
+	// DefaultIntercertDir is the directory for where to store all data related to intercert
 	DefaultIntercertDir = constructDir()
-	Version             string
-	Commit              string
+	// Version is the human readable version of intercert
+	Version string
+	// Commit is the git commit used to build this version
+	Commit string
 )
 
 var rootCmd = &cobra.Command{
@@ -40,6 +43,7 @@ func initConfig() {
 	}
 }
 
+// Execute the cmd chain
 func Execute(version string, commit string) {
 	Version = version
 	Commit = commit
@@ -59,6 +63,7 @@ func constructDir() string {
 	return home + "/.intercert"
 }
 
+// UserAgent returns a formatted user agent (UA) string
 func UserAgent() string {
 	return fmt.Sprintf("intercert v%s (%s); %s-%s", Version, Commit, runtime.GOOS, runtime.GOARCH)
 }

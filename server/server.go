@@ -11,6 +11,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
+// StartServer spawns a server instance given a server config
 func StartServer(config *config.ServerConfig) {
 	s := grpc.NewServer()
 

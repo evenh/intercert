@@ -8,8 +8,10 @@ import (
 )
 
 var (
+	// Version is the human readable version of intercert
 	Version = "DEV-SNAPSHOT"
-	Commit  = "N/A"
+	// Commit is the git commit used to build this version
+	Commit = "N/A"
 )
 
 func main() {

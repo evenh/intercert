@@ -16,7 +16,7 @@ func findExpiredCerts(renewalThreshold time.Duration) func() {
 // Check that every cert from the config is present in the file system
 func ensureCertsFromConfig(storage *CertStorage, wantedDomains []string) func() {
 	return func() {
-		storedDomains, err := storage.ListCertsForDomains()
+		storedDomains, err := storage.LocallyStoredDomains()
 
 		if err != nil {
 			log.Warnf("Could not fetch stored certs: %v", err)

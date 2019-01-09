@@ -81,6 +81,7 @@ func Register(f func(), name string, delay time.Duration, runImmediately bool) *
 	return &j
 }
 
+// IsJobsStopped determines whether all jobs supplied is stopped or not
 func IsJobsStopped(jobs []Job) bool {
 	for _, job := range jobs {
 		if job.started {

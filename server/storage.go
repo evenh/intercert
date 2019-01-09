@@ -6,7 +6,7 @@ import (
 	"github.com/xenolf/lego/log"
 )
 
-// Creates a new cache, backed by a file system storage. This is more
+// IntercertCache creates a new cache, backed by a file system storage. This is more
 // or less the same as provided by certmagic, but customized to save to
 // directory provided in the configuration.
 func IntercertCache(config *config.ServerConfig) *certmagic.Cache {
