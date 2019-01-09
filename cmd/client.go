@@ -38,6 +38,6 @@ var clientCmd = &cobra.Command{
 			RenewalThreshold: viper.GetDuration("client.renewalThreshold"),
 		}
 
-		client.StartClient(&c)
+		client.StartClient(&c, UserAgent())
 	},
 }

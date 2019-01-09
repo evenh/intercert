@@ -15,6 +15,8 @@ import (
 	"github.com/xenolf/lego/certcrypto"
 	"github.com/xenolf/lego/log"
 	"github.com/xenolf/lego/providers/dns"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/peer"
 	"strings"
 )
 
@@ -58,6 +60,7 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 
 func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateRequest) (*api.CertificateResponse, error) {
 	// TODO: Validate auth in context
+	logClient(ctx, "IssueCert("+req.DnsName+")")
 
 	log.Infof("[%s] Received certificate request from client", req.DnsName)
 
@@ -107,6 +110,7 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateReques
 }
 
 func (s IssuerService) Ping(ctx context.Context, req *api.PingRequest) (*api.PingResponse, error) {
+	logClient(ctx, "Ping")
 	// TODO: Auth for ping?
 	return &api.PingResponse{Msg: "pong"}, nil
 }
@@ -148,4 +152,13 @@ func pemEncodeCerts(cert tls.Certificate) (string, error) {
 	}
 
 	return strings.Join(certificates, ""), nil
+}
+
+func logClient(ctx context.Context, operation string) {
+	md, mdOK := metadata.FromIncomingContext(ctx)
+	peerInfo, pOK := peer.FromContext(ctx)
+
+	if mdOK && pOK {
+		log.Infof("Call from %s - %s: %s", peerInfo.Addr, md["user-agent"], operation)
+	}
 }

@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"runtime"
 )
 
 var (
@@ -54,4 +56,8 @@ func constructDir() string {
 	}
 
 	return home + "/.intercert"
+}
+
+func UserAgent() string {
+	return fmt.Sprintf("intercert v%s (%s); %s-%s", Version, Commit, runtime.GOOS, runtime.GOARCH)
 }

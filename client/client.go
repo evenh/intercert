@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func StartClient(config *config.ClientConfig) {
+func StartClient(config *config.ClientConfig, userAgent string) {
 	log.Infof("Initializing client")
 
 	// Check if the config is valid
@@ -28,7 +28,7 @@ func StartClient(config *config.ClientConfig) {
 	log.Infof("Configuring connection to %s for gRPC operations", config.GetDialAddr())
 
 	// Configure connection
-	conn, err := grpc.Dial(config.GetDialAddr(), grpc.WithInsecure()) // TODO: Not run insecure
+	conn, err := grpc.Dial(config.GetDialAddr(), grpc.WithInsecure(), grpc.WithUserAgent(userAgent+";")) // TODO: Not run insecure
 
 	if err != nil {
 		log.Warnf("Could not configure connection to host: %v", err)
