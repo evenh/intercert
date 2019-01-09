@@ -955,6 +955,8 @@
     "github.com/xenolf/lego/log",
     "github.com/xenolf/lego/providers/dns",
     "google.golang.org/grpc",
+    "google.golang.org/grpc/metadata",
+    "google.golang.org/grpc/peer",
     "google.golang.org/grpc/reflection",
   ]
   solver-name = "gps-cdcl"
