@@ -13,6 +13,9 @@ install:
 env:
   - PATH=$HOME/protobuf/bin:$PATH
 
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
 # calls goreleaser
 deploy:
   - provider: script

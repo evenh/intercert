@@ -171,4 +171,7 @@ $RECYCLE.BIN/
 # Goreleaser
 dist/
 
+# Code coverage
+coverage.txt
+
 # End of https://www.gitignore.io/api/linux,macos,windows,jetbrains+all
