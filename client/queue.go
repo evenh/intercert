@@ -67,7 +67,6 @@ func CertWorker(id int, client api.CertificateIssuerClient, storage *CertStorage
 			if err != nil {
 				log.Warnf("Could not write cert data for %s: %v", job.DNSName, err)
 			}
-			// TODO: Store certs
 		}
 	}
 }

@@ -8,7 +8,6 @@ import (
 	"github.com/evenh/intercert/config"
 	"github.com/xenolf/lego/log"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
 )
 
 // StartServer spawns a server instance given a server config
@@ -24,9 +23,6 @@ func StartServer(config *config.ServerConfig) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// TODO: Remove after testing? Used for grpcui
-	reflection.Register(s)
 
 	if err := s.Serve(ln); err != nil {
 		log.Fatalf("failed to serve: %s", err)
