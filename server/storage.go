@@ -21,5 +21,5 @@ func createCache(storage certmagic.Storage) *certmagic.Cache {
 }
 
 func createStorage(dataDirectory string) certmagic.Storage {
-	return certmagic.FileStorage{Path: dataDirectory}
+	return &certmagic.FileStorage{Path: dataDirectory}
 }
