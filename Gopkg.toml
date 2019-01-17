@@ -21,7 +21,7 @@
 
 [[constraint]]
   name = "google.golang.org/grpc"
-  version = "1.16.0"
+  version = "1.18.0"
 
 # TODO: Revisit when xenolf/lego is > 1.2.1
 [[override]]
