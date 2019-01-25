@@ -30,7 +30,13 @@ func StartClient(config *config.ClientConfig, userAgent string) {
 	log.Infof("Configuring connection to %s for gRPC operations", config.GetDialAddr())
 
 	// Configure connection
-	conn, err := grpc.Dial(config.GetDialAddr(), grpc.WithInsecure(), grpc.WithUserAgent(userAgent+";")) // TODO: Not run insecure
+	// TODO: Not run insecure
+	conn, err := grpc.Dial(
+		config.GetDialAddr(),
+		grpc.WithBackoffConfig(grpc.DefaultBackoffConfig),
+		grpc.WithInsecure(),
+		grpc.WithUserAgent(userAgent+";"),
+	)
 
 	if err != nil {
 		log.Warnf("Could not configure connection to host: %v", err)
