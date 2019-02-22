@@ -25,7 +25,7 @@ type CertStorage struct {
 // NewCertStorage constructs an instance of the CertStorage struct, with validation
 func NewCertStorage(storageDirectory string) *CertStorage {
 	if _, err := os.Stat(storageDirectory); os.IsNotExist(err) {
-		err = os.Mkdir(storageDirectory, 0777)
+		err = os.MkdirAll(storageDirectory, 0777)
 
 		if err != nil {
 			log.Warnf("Could not create directory for certs: %v", err)
