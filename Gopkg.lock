@@ -397,11 +397,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:061811d1e12758af34815d315aa8ddae8bc57a6f2bfa6994dde5baaae29e6a02"
+  digest = "1:9c3b94fe155aa680cc04152667739d7f178ca6edd833b5b2fa7e5972f9f49ff3"
   name = "github.com/mholt/certmagic"
   packages = ["."]
   pruneopts = "UT"
-  revision = "f92e85346d81334853749f5ce4434b48c4c2ed25"
+  revision = "e3e89d1096d76d61680f8eeb8f67649baa6c54b8"
 
 [[projects]]
   digest = "1:702ff5d8a0196ccb0627f35996efd1081be00c8ae1719402adbffc6e0f8f59ac"
