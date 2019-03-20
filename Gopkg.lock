@@ -234,6 +234,23 @@
   version = "v1.4.7"
 
 [[projects]]
+  digest = "1:346b10ffc72174cdc0cb0dc906d371d738ef808f2b4a8d27df697ded9ddf8942"
+  name = "github.com/go-acme/lego"
+  packages = [
+    "acme",
+    "certcrypto",
+    "certificate",
+    "challenge",
+    "challenge/http01",
+    "challenge/tlsalpn01",
+    "lego",
+    "registration",
+  ]
+  pruneopts = "UT"
+  revision = "52e43eb318b07ace590c2144804292c89aa74802"
+  version = "v2.2.0"
+
+[[projects]]
   digest = "1:19ea97688477f0c05ef94e9ddf48c5a2d8837b4ba781a1014c068293dcca2e5b"
   name = "github.com/go-ini/ini"
   packages = ["."]
@@ -392,11 +409,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9c3b94fe155aa680cc04152667739d7f178ca6edd833b5b2fa7e5972f9f49ff3"
+  digest = "1:50d0ad64282a9828ff1bac544ca0e05ad19d047f688e7def61ee8e7a9863cb52"
   name = "github.com/mholt/certmagic"
   packages = ["."]
   pruneopts = "UT"
-  revision = "e3e89d1096d76d61680f8eeb8f67649baa6c54b8"
+  revision = "ee1543e2f234dc5e8eb3c7e76cbafb89398dd455"
 
 [[projects]]
   digest = "1:702ff5d8a0196ccb0627f35996efd1081be00c8ae1719402adbffc6e0f8f59ac"
@@ -598,7 +615,7 @@
   revision = "1dc93a7db3567a5ccf865106afac88278ba940cf"
 
 [[projects]]
-  digest = "1:6611ef35a2e249b808230034c8e2cf915b7a5e5b537ea409c6c2f025aeb70e6d"
+  digest = "1:95ecee52c199633e5daf42de8249ad8b77a58660a7066a73437499a3929dc5a3"
   name = "github.com/xenolf/lego"
   packages = [
     "acme",
@@ -613,7 +630,6 @@
     "challenge/http01",
     "challenge/resolver",
     "challenge/tlsalpn01",
-    "lego",
     "log",
     "platform/config/env",
     "platform/wait",
