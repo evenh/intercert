@@ -141,6 +141,14 @@
   revision = "1d708c097a6a59a3e6432affc53cf41808b35c8b"
 
 [[projects]]
+  digest = "1:166438587ed45ac211dab8a3ecebf4fa0c186d0db63430fb9127bbc2e5fcdc67"
+  name = "github.com/cenkalti/backoff"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "1e4cf3da559842a91afcb6ea6141451e6c30c618"
+  version = "v2.1.1"
+
+[[projects]]
   digest = "1:65b0d980b428a6ad4425f2df4cd5410edd81f044cf527bd1c345368444649e58"
   name = "github.com/census-instrumentation/opencensus-proto"
   packages = [
@@ -232,6 +240,31 @@
   pruneopts = "UT"
   revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
   version = "v1.4.7"
+
+[[projects]]
+  digest = "1:753612b8ed5c596df6837a2fe00e165c7a74200079fec90af9eb8b4107fe06ee"
+  name = "github.com/go-acme/lego"
+  packages = [
+    "acme",
+    "acme/api",
+    "acme/api/internal/nonces",
+    "acme/api/internal/secure",
+    "acme/api/internal/sender",
+    "certcrypto",
+    "certificate",
+    "challenge",
+    "challenge/dns01",
+    "challenge/http01",
+    "challenge/resolver",
+    "challenge/tlsalpn01",
+    "lego",
+    "log",
+    "platform/wait",
+    "registration",
+  ]
+  pruneopts = "UT"
+  revision = "aaecc1ca7254190b71c5f01f57ee3bb6701bc937"
+  version = "v2.4.0"
 
 [[projects]]
   digest = "1:19ea97688477f0c05ef94e9ddf48c5a2d8837b4ba781a1014c068293dcca2e5b"
@@ -392,11 +425,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9c3b94fe155aa680cc04152667739d7f178ca6edd833b5b2fa7e5972f9f49ff3"
+  digest = "1:1293242070d3568f0d876f7a0b7fcaa1480c43044d75a3b908be456fc0d691ed"
   name = "github.com/mholt/certmagic"
   packages = ["."]
   pruneopts = "UT"
-  revision = "e3e89d1096d76d61680f8eeb8f67649baa6c54b8"
+  revision = "1f532f6355516f202887410f3b0af1929aa743fc"
 
 [[projects]]
   digest = "1:702ff5d8a0196ccb0627f35996efd1081be00c8ae1719402adbffc6e0f8f59ac"
@@ -598,7 +631,7 @@
   revision = "1dc93a7db3567a5ccf865106afac88278ba940cf"
 
 [[projects]]
-  digest = "1:6611ef35a2e249b808230034c8e2cf915b7a5e5b537ea409c6c2f025aeb70e6d"
+  digest = "1:b001a30221ead60906b8878d98be3eb874318fa62a0e2068642d71a2b4902795"
   name = "github.com/xenolf/lego"
   packages = [
     "acme",
@@ -607,13 +640,8 @@
     "acme/api/internal/secure",
     "acme/api/internal/sender",
     "certcrypto",
-    "certificate",
     "challenge",
     "challenge/dns01",
-    "challenge/http01",
-    "challenge/resolver",
-    "challenge/tlsalpn01",
-    "lego",
     "log",
     "platform/config/env",
     "platform/wait",
@@ -674,7 +702,6 @@
     "providers/dns/vscale",
     "providers/dns/vscale/internal",
     "providers/dns/vultr",
-    "registration",
   ]
   pruneopts = "UT"
   revision = "86c9de3db61436d07de2471508067f18c16c1997"
