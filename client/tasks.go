@@ -1,8 +1,20 @@
 package client
 
 import (
+	"context"
+	"github.com/evenh/intercert/api"
 	"github.com/go-acme/lego/log"
 )
+
+func pingServer(client api.CertificateIssuerClient) func() {
+	return func() {
+		_, err := client.Ping(context.Background(), &api.PingRequest{Msg: "ping"})
+
+		if err != nil {
+			log.Warnf("Could not ping intercert host: %v", err)
+		}
+	}
+}
 
 // Check that every cert from the config is present in the file system
 func ensureCertsFromConfig(storage *CertStorage, wantedDomains []string) func() {
