@@ -67,7 +67,7 @@ func StartClient(config *config.ClientConfig, userAgent string) {
 	}
 
 	// Set up scheduled tasks
-	tasks := configureTasks(config, certStorage)
+	tasks := configureTasks(client, config, certStorage)
 
 	// Handle termination
 	configureTermination(tasks)
@@ -114,12 +114,13 @@ func validateConfig(c *config.ClientConfig) error {
 	return nil
 }
 
-func configureTasks(config *config.ClientConfig, storage *CertStorage) []Job {
+func configureTasks(client api.CertificateIssuerClient, config *config.ClientConfig, storage *CertStorage) []Job {
 	var tasks []Job
 
+	pinger := *Register(pingServer(client), "Ping intercert host", 10*time.Minute, false)
 	desiredCheck := *Register(ensureCertsFromConfig(storage, config.Domains), "Ensure configured domains is present", 1*time.Hour, true)
 
-	tasks = append(tasks, desiredCheck)
+	tasks = append(tasks, pinger, desiredCheck)
 
 	return tasks
 }
