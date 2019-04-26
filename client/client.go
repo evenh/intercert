@@ -97,7 +97,7 @@ func configureTermination(backgroundJobs []Job) {
 }
 
 func validateConfig(c *config.ClientConfig) error {
-	if len(c.Domains) <= 1 {
+	if len(c.Domains) < 1 {
 		return errors.New("no domains specified")
 	}
 
