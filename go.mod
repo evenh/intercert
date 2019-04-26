@@ -53,7 +53,7 @@ require (
 	github.com/nrdcg/goinwx v0.6.0 // indirect
 	github.com/oracle/oci-go-sdk v5.4.0+incompatible // indirect
 	github.com/ovh/go-ovh v0.0.0-20181109152953-ba5adb4cf014 // indirect
-	github.com/pkg/errors v0.8.0
+	github.com/pkg/errors v0.8.1
 	github.com/sacloud/libsacloud v1.21.1 // indirect
 	github.com/sdboyer/constext v0.0.0-20170321163424-836a14457353 // indirect
 	github.com/sirupsen/logrus v1.2.0 // indirect
