@@ -3,9 +3,10 @@ package cmd
 import (
 	"errors"
 
+	"github.com/go-acme/lego/log"
+
 	"github.com/evenh/intercert/config"
 	"github.com/evenh/intercert/server"
-	"github.com/go-acme/lego/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -46,8 +47,7 @@ var serveCmd = &cobra.Command{
 			PrintErrorAndExit(errors.New("the ACME ToS must be agreed to"))
 		}
 
-		log.Infof("Listening on port %v", c.Port)
-
 		server.StartServer(&c)
+		log.Infof("Listening on port %v", c.Port)
 	},
 }
