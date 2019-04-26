@@ -1,17 +1,8 @@
 package client
 
 import (
-	"time"
-
 	"github.com/go-acme/lego/log"
 )
-
-// Find all expired certificates and ensure they are queued up for renewal
-func findExpiredCerts(renewalThreshold time.Duration) func() {
-	return func() {
-		log.Infof("Scanning for expired certificates (NOT IMPLEMENTED YET)")
-	}
-}
 
 // Check that every cert from the config is present in the file system
 func ensureCertsFromConfig(storage *CertStorage, wantedDomains []string) func() {

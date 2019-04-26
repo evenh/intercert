@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"time"
-
 	"github.com/evenh/intercert/client"
 	"github.com/evenh/intercert/config"
 	"github.com/spf13/cobra"
@@ -17,11 +15,9 @@ func init() {
 	clientCmd.PersistentFlags().IntP("port", "p", 6300, "The port the server will listen on")
 	clientCmd.PersistentFlags().StringP("storage", "s", DefaultIntercertDir+"/client-data", "The place to store certificates and other data")
 	clientCmd.PersistentFlags().StringArrayP("domains", "D", []string{}, "The domains to request certs for")
-	clientCmd.PersistentFlags().DurationP("expiry", "e", 30*time.Minute, "How often to check for expired certificates")
-	clientCmd.PersistentFlags().DurationP("renewalThreshold", "r", 24*time.Hour, "How early before expiry shall certificates be renewed")
 
 	// Load clientCmd.PersistentFlags() values from config
-	bindPrefixedFlags(clientCmd, "client", "host", "port", "storage", "domains", "expiry", "renewalThreshold")
+	bindPrefixedFlags(clientCmd, "client", "host", "port", "storage", "domains")
 }
 
 var clientCmd = &cobra.Command{
@@ -35,8 +31,6 @@ var clientCmd = &cobra.Command{
 			Port:             viper.GetInt("client.port"),
 			Storage:          viper.GetString("client.storage"),
 			Domains:          viper.GetStringSlice("client.domains"),
-			ExpiryCheckAt:    viper.GetDuration("client.expiry"),
-			RenewalThreshold: viper.GetDuration("client.renewalThreshold"),
 		}
 
 		client.StartClient(&c, UserAgent())
