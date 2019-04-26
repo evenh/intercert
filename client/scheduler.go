@@ -36,14 +36,14 @@ func (j *Job) Stop() {
 func (j *Job) start() {
 	j.started = true
 
+	// Check if runImmediately is set on the first run
+	if j.firstRun && j.runImmediately {
+		j.fn()
+	}
+	j.firstRun = false
+
 	go func() {
 		for {
-			// Check if runImmediately is set on the first run
-			if j.firstRun && j.runImmediately {
-				j.fn()
-			}
-			j.firstRun = false
-
 			// Sleep for the predetermined time.
 			time.Sleep(j.delay)
 
