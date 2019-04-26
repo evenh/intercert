@@ -7,15 +7,11 @@ require (
 	github.com/Azure/azure-sdk-for-go v23.1.0+incompatible // indirect
 	github.com/Azure/go-autorest v11.2.8+incompatible // indirect
 	github.com/JamesClonk/vultr v0.0.0-20180101102256-fa1c0367800d // indirect
-	github.com/Masterminds/semver v1.4.2 // indirect
-	github.com/Masterminds/vcs v1.13.0 // indirect
 	github.com/OpenDNS/vegadns2client v0.0.0-20180418235048-a3fa4a771d87 // indirect
 	github.com/akamai/AkamaiOPEN-edgegrid-golang v0.7.4 // indirect
 	github.com/aliyun/alibaba-cloud-sdk-go v0.0.0-20181211063847-90f3fcd05ea3 // indirect
-	github.com/armon/go-radix v1.0.0 // indirect
 	github.com/aws/aws-sdk-go v1.10.51 // indirect
 	github.com/bobesa/go-domain-util v0.0.0-20180815122459-1d708c097a6a
-	github.com/boltdb/bolt v1.3.1 // indirect
 	github.com/census-instrumentation/opencensus-proto v0.1.0 // indirect
 	github.com/cloudflare/cloudflare-go v0.8.5 // indirect
 	github.com/cpu/goacmedns v0.0.1 // indirect
@@ -29,7 +25,6 @@ require (
 	github.com/go-acme/lego v2.5.0+incompatible
 	github.com/go-ini/ini v1.39.3 // indirect
 	github.com/go-resty/resty v1.10.3 // indirect
-	github.com/golang/dep v0.5.1 // indirect
 	github.com/golang/protobuf v1.3.1
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/google/uuid v0.0.0-20161128191214-064e2069ce9c // indirect
@@ -37,7 +32,6 @@ require (
 	github.com/h2non/gock v0.0.0-00010101000000-000000000000 // indirect
 	github.com/iij/doapi v0.0.0-20180911005243-8803795a9b7b // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
-	github.com/jmank88/nuts v0.3.0 // indirect
 	github.com/jmespath/go-jmespath v0.0.0-20151117175822-3433f3ea46d9 // indirect
 	github.com/json-iterator/go v1.1.5 // indirect
 	github.com/juju/ratelimit v1.0.1 // indirect
@@ -48,14 +42,12 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742 // indirect
 	github.com/namedotcom/go v0.0.0-20180403034216-08470befbe04 // indirect
-	github.com/nightlyone/lockfile v0.0.0-20180618180623-0ad87eef1443 // indirect
 	github.com/nrdcg/auroradns v1.0.0 // indirect
 	github.com/nrdcg/goinwx v0.6.0 // indirect
 	github.com/oracle/oci-go-sdk v5.4.0+incompatible // indirect
 	github.com/ovh/go-ovh v0.0.0-20181109152953-ba5adb4cf014 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/sacloud/libsacloud v1.21.1 // indirect
-	github.com/sdboyer/constext v0.0.0-20170321163424-836a14457353 // indirect
 	github.com/sirupsen/logrus v1.2.0 // indirect
 	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
 	github.com/spf13/cobra v0.0.3
