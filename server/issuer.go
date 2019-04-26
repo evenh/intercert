@@ -5,6 +5,7 @@ import (
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/rsa"
+	"time"
 
 	"github.com/go-acme/lego/certcrypto"
 
@@ -40,8 +41,7 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 		log.Fatalf("Could not configure DNS provider: %v", err)
 	}
 
-	// Construct the new certmagic instance
-	magic := certmagic.NewWithCache(IntercertCache(config), certmagic.Config{
+	certmagicConfig := &certmagic.Config{
 		CA:                      config.Directory,
 		Email:                   config.Email,
 		Agreed:                  config.Agree,
@@ -50,7 +50,17 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 		KeyType:                 certcrypto.RSA4096,
 		MustStaple:              false,
 		DNSProvider:             dnsProvider,
-	})
+		Storage:                 createStorage(config.Storage),
+	}
+
+	// Construct the new certmagic instance
+	magic := certmagic.New(certmagic.NewCache(certmagic.CacheOptions{
+		RenewCheckInterval: 10 * time.Minute,
+		OCSPCheckInterval:  1 * time.Hour,
+		GetConfigForCert: func(certificate certmagic.Certificate) (certmagic.Config, error) {
+			return *certmagicConfig, nil
+		},
+	}), *certmagicConfig)
 
 	issuer.client = magic
 
@@ -173,4 +183,11 @@ func logClient(ctx context.Context, operation string) {
 	if mdOK && pOK {
 		log.Infof("Call from %s - %s: %s", peerInfo.Addr, md["user-agent"], operation)
 	}
+}
+
+func createStorage(dataDirectory string) certmagic.Storage {
+	storage := &certmagic.FileStorage{Path: dataDirectory}
+	log.Infof("Using directory %s for storage", storage)
+
+	return storage
 }
