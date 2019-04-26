@@ -3,11 +3,7 @@ COMMIT := $(shell git rev-parse --short HEAD)
 all: clean deps proto test build
 
 deps:
-	@ if ! which dep > /dev/null; then \
-		echo "warning: dep not installed - doing it now" >&2; \
-		go get -u -v github.com/golang/dep/cmd/dep; \
-	fi
-	dep ensure
+	go mod download
 
 build:
 	go build -race -ldflags "-s -w -X main.Version=DEV-SNAPSHOT -X main.Commit=$(COMMIT)" -o dist/intercert github.com/evenh/intercert

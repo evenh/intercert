@@ -2,9 +2,8 @@ project_name: intercert
 
 before:
   hooks:
-    # Install dep and install dependencies
-    - go get -u -v github.com/golang/dep/cmd/dep
-    - dep ensure
+    # Install dependencies
+    - go mod download
     # Re-generate gRPC stubs
     - go get -u -v github.com/golang/protobuf/protoc-gen-go
     - protoc -I api --go_out=plugins=grpc:api api/api.proto
