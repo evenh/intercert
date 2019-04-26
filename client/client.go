@@ -111,20 +111,15 @@ func validateConfig(c *config.ClientConfig) error {
 		return errors.New("hostname was empty")
 	}
 
-	if c.RenewalThreshold > (24*time.Hour)*30 {
-		return errors.New("renewal threshold can't exceed 30 days")
-	}
-
 	return nil
 }
 
 func configureTasks(config *config.ClientConfig, storage *CertStorage) []Job {
 	var tasks []Job
 
-	expiryCheck := *Register(findExpiredCerts(config.RenewalThreshold), "Expired certs watcher", config.ExpiryCheckAt, false)
-	desiredCheck := *Register(ensureCertsFromConfig(storage, config.Domains), "Ensure configured domains is present", 8*time.Hour, true)
+	desiredCheck := *Register(ensureCertsFromConfig(storage, config.Domains), "Ensure configured domains is present", 1*time.Hour, true)
 
-	tasks = append(tasks, expiryCheck, desiredCheck)
+	tasks = append(tasks, desiredCheck)
 
 	return tasks
 }

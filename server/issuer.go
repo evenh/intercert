@@ -51,11 +51,12 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 		MustStaple:              false,
 		DNSProvider:             dnsProvider,
 		Storage:                 createStorage(config.Storage),
+		RenewDurationBefore:     config.RenewalThreshold,
 	}
 
 	// Construct the new certmagic instance
 	magic := certmagic.New(certmagic.NewCache(certmagic.CacheOptions{
-		RenewCheckInterval: 10 * time.Minute,
+		RenewCheckInterval: config.ExpiryCheckAt,
 		OCSPCheckInterval:  1 * time.Hour,
 		GetConfigForCert: func(certificate certmagic.Certificate) (certmagic.Config, error) {
 			return *certmagicConfig, nil
@@ -68,7 +69,7 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 	whitelist := NewWhitelist(config.Domains)
 	issuer.whitelist = whitelist
 
-	log.Infof("Certificate issuer service configured")
+	log.Infof("Certificate issuer service configured - certificates will be renewed %v before expiry", config.RenewalThreshold)
 
 	return issuer
 }

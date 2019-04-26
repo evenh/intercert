@@ -25,6 +25,10 @@ type ServerConfig struct {
 	// The location on disk to save certificates and other data
 	// that the server produces.
 	Storage string
+	// How often to check for expired certificates
+	ExpiryCheckAt time.Duration
+	// How early before expiry shall certificates be renewed?
+	RenewalThreshold time.Duration
 }
 
 // ClientConfig holds configuration that is required for creating a client
@@ -38,10 +42,6 @@ type ClientConfig struct {
 	Storage string
 	// The domains to request certs for
 	Domains []string
-	// How often to check for expired certificates
-	ExpiryCheckAt time.Duration
-	// How early before expiry shall certificates be renewed?
-	RenewalThreshold time.Duration
 }
 
 // GetDialAddr gets the formatted address to dial a new gRPC connection
