@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/evenh/intercert/api"
-	"github.com/xenolf/lego/log"
+	"github.com/go-acme/lego/log"
 )
 
 // JobQueue holds all active jobs

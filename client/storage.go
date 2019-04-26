@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/evenh/intercert/api"
+	"github.com/go-acme/lego/log"
 	"github.com/pkg/errors"
-	"github.com/xenolf/lego/log"
 )
 
 const (

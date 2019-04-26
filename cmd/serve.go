@@ -5,9 +5,9 @@ import (
 
 	"github.com/evenh/intercert/config"
 	"github.com/evenh/intercert/server"
+	"github.com/go-acme/lego/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/xenolf/lego/log"
 )
 
 func init() {

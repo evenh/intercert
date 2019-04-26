@@ -6,6 +6,8 @@ import (
 	"crypto/ecdsa"
 	"crypto/rsa"
 
+	"github.com/go-acme/lego/certcrypto"
+
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
@@ -13,11 +15,10 @@ import (
 
 	"github.com/evenh/intercert/api"
 	"github.com/evenh/intercert/config"
+	"github.com/go-acme/lego/log"
+	"github.com/go-acme/lego/providers/dns"
 	"github.com/mholt/certmagic"
 	"github.com/pkg/errors"
-	"github.com/xenolf/lego/certcrypto"
-	"github.com/xenolf/lego/log"
-	"github.com/xenolf/lego/providers/dns"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
 )

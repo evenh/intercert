@@ -1,9 +1,14 @@
 package server
 
 import (
+	"github.com/go-acme/lego/providers/dns"
+
+	"github.com/go-acme/lego/certcrypto"
+	"github.com/go-acme/lego/challenge"
+
 	"github.com/evenh/intercert/config"
+	"github.com/go-acme/lego/log"
 	"github.com/mholt/certmagic"
-	"github.com/xenolf/lego/log"
 )
 
 // IntercertCache creates a new cache, backed by a file system storage. This is more

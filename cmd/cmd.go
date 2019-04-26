@@ -3,9 +3,9 @@ package cmd
 import (
 	"os"
 
+	"github.com/go-acme/lego/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/xenolf/lego/log"
 )
 
 // PrintErrorAndExit logs a fatal error and exits the process with return code 1
