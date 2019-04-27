@@ -11,10 +11,10 @@ import (
 )
 
 // StartServer spawns a server instance given a server config
-func StartServer(config *config.ServerConfig) {
+func StartServer(config *config.ServerConfig, userAgent string) {
 	s := grpc.NewServer()
 
-	issuerService := NewIssuerService(config)
+	issuerService := NewIssuerService(config, userAgent)
 
 	api.RegisterCertificateIssuerServer(s, issuerService)
 
