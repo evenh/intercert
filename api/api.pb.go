@@ -202,32 +202,119 @@ func (m *PingResponse) GetMsg() string {
 	return ""
 }
 
+type CertificateRenewalNotificationRequest struct {
+	// A list of DNS names to monitor for renewals
+	DnsNames             []string `protobuf:"bytes,1,rep,name=dnsNames,proto3" json:"dnsNames,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CertificateRenewalNotificationRequest) Reset()         { *m = CertificateRenewalNotificationRequest{} }
+func (m *CertificateRenewalNotificationRequest) String() string { return proto.CompactTextString(m) }
+func (*CertificateRenewalNotificationRequest) ProtoMessage()    {}
+func (*CertificateRenewalNotificationRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{4}
+}
+
+func (m *CertificateRenewalNotificationRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CertificateRenewalNotificationRequest.Unmarshal(m, b)
+}
+func (m *CertificateRenewalNotificationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CertificateRenewalNotificationRequest.Marshal(b, m, deterministic)
+}
+func (m *CertificateRenewalNotificationRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CertificateRenewalNotificationRequest.Merge(m, src)
+}
+func (m *CertificateRenewalNotificationRequest) XXX_Size() int {
+	return xxx_messageInfo_CertificateRenewalNotificationRequest.Size(m)
+}
+func (m *CertificateRenewalNotificationRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CertificateRenewalNotificationRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CertificateRenewalNotificationRequest proto.InternalMessageInfo
+
+func (m *CertificateRenewalNotificationRequest) GetDnsNames() []string {
+	if m != nil {
+		return m.DnsNames
+	}
+	return nil
+}
+
+// Response for a certificate that has been renewed on the server
+type RenewedCertificateEvent struct {
+	// Example: foo.bar.com
+	DnsName              string   `protobuf:"bytes,1,opt,name=dnsName,proto3" json:"dnsName,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *RenewedCertificateEvent) Reset()         { *m = RenewedCertificateEvent{} }
+func (m *RenewedCertificateEvent) String() string { return proto.CompactTextString(m) }
+func (*RenewedCertificateEvent) ProtoMessage()    {}
+func (*RenewedCertificateEvent) Descriptor() ([]byte, []int) {
+	return fileDescriptor_00212fb1f9d3bf1c, []int{5}
+}
+
+func (m *RenewedCertificateEvent) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RenewedCertificateEvent.Unmarshal(m, b)
+}
+func (m *RenewedCertificateEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RenewedCertificateEvent.Marshal(b, m, deterministic)
+}
+func (m *RenewedCertificateEvent) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RenewedCertificateEvent.Merge(m, src)
+}
+func (m *RenewedCertificateEvent) XXX_Size() int {
+	return xxx_messageInfo_RenewedCertificateEvent.Size(m)
+}
+func (m *RenewedCertificateEvent) XXX_DiscardUnknown() {
+	xxx_messageInfo_RenewedCertificateEvent.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RenewedCertificateEvent proto.InternalMessageInfo
+
+func (m *RenewedCertificateEvent) GetDnsName() string {
+	if m != nil {
+		return m.DnsName
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*CertificateRequest)(nil), "api.CertificateRequest")
 	proto.RegisterType((*CertificateResponse)(nil), "api.CertificateResponse")
 	proto.RegisterType((*PingRequest)(nil), "api.PingRequest")
 	proto.RegisterType((*PingResponse)(nil), "api.PingResponse")
+	proto.RegisterType((*CertificateRenewalNotificationRequest)(nil), "api.CertificateRenewalNotificationRequest")
+	proto.RegisterType((*RenewedCertificateEvent)(nil), "api.RenewedCertificateEvent")
 }
 
 func init() { proto.RegisterFile("api.proto", fileDescriptor_00212fb1f9d3bf1c) }
 
 var fileDescriptor_00212fb1f9d3bf1c = []byte{
-	// 234 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x90, 0x4f, 0x4b, 0x03, 0x31,
-	0x10, 0xc5, 0xdd, 0xae, 0x7f, 0xd8, 0xa9, 0x87, 0x76, 0x14, 0x0c, 0x3d, 0xe8, 0x92, 0x53, 0x2f,
-	0xee, 0x41, 0xbf, 0x80, 0xe0, 0x49, 0x04, 0x91, 0xfd, 0x06, 0xb1, 0x8e, 0x25, 0x87, 0x64, 0x63,
-	0x26, 0x15, 0xbc, 0xfb, 0xc1, 0x25, 0xd9, 0xac, 0xa6, 0xf4, 0x36, 0xf3, 0xe6, 0x97, 0xbc, 0xc7,
-	0x83, 0x46, 0x39, 0xdd, 0x39, 0x3f, 0x84, 0x01, 0x6b, 0xe5, 0xb4, 0xec, 0x00, 0x1f, 0xc9, 0x07,
-	0xfd, 0xa1, 0x37, 0x2a, 0x50, 0x4f, 0x9f, 0x3b, 0xe2, 0x80, 0x02, 0xce, 0xde, 0x2d, 0xbf, 0x28,
-	0x43, 0xa2, 0x6a, 0xab, 0x75, 0xd3, 0x4f, 0xab, 0x34, 0x70, 0xb1, 0xc7, 0xb3, 0x1b, 0x2c, 0x13,
-	0xb6, 0x30, 0xdf, 0xfc, 0xcb, 0xf9, 0x51, 0x29, 0xe1, 0x35, 0x80, 0xf3, 0xfa, 0x4b, 0x05, 0x7a,
-	0xa6, 0x6f, 0x31, 0x4b, 0x40, 0xa1, 0xe0, 0x25, 0x9c, 0x58, 0x65, 0x88, 0x45, 0xdd, 0xd6, 0xeb,
-	0xa6, 0x1f, 0x17, 0x79, 0x03, 0xf3, 0x57, 0x6d, 0xb7, 0x53, 0xae, 0x05, 0xd4, 0x86, 0xb7, 0xf9,
-	0xfb, 0x38, 0xca, 0x16, 0xce, 0x47, 0x20, 0x07, 0xc9, 0xc4, 0xec, 0x8f, 0xb8, 0xfb, 0xa9, 0x60,
-	0x59, 0x44, 0x7e, 0x62, 0xde, 0x91, 0xc7, 0x07, 0x68, 0xd2, 0x14, 0x2f, 0x78, 0xd5, 0xc5, 0x56,
-	0x0e, 0x7b, 0x58, 0x89, 0xc3, 0xc3, 0xe8, 0x23, 0x8f, 0xf0, 0x16, 0x8e, 0xa3, 0x33, 0x2e, 0x12,
-	0x53, 0xa4, 0x5c, 0x2d, 0x0b, 0x65, 0xc2, 0xdf, 0x4e, 0x53, 0xe9, 0xf7, 0xbf, 0x01, 0x00, 0x00,
-	0xff, 0xff, 0xb3, 0x12, 0x61, 0x77, 0x81, 0x01, 0x00, 0x00,
+	// 300 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0x6f, 0x4b, 0xc3, 0x30,
+	0x10, 0xc6, 0xd7, 0xd5, 0x7f, 0xbd, 0xf9, 0x62, 0x3b, 0x07, 0x0b, 0x45, 0xb4, 0x04, 0x84, 0x21,
+	0x58, 0xc4, 0x7d, 0x01, 0x61, 0xf8, 0x42, 0x84, 0x29, 0xfd, 0x06, 0x71, 0x3d, 0x47, 0xc0, 0xa6,
+	0xb5, 0xe9, 0x26, 0x7e, 0x65, 0x3f, 0x85, 0x34, 0x4d, 0xb7, 0x8c, 0x32, 0xdf, 0xe5, 0x9e, 0xfc,
+	0x72, 0x7d, 0xee, 0xb9, 0x42, 0x20, 0x0a, 0x19, 0x17, 0x65, 0x5e, 0xe5, 0xe8, 0x8b, 0x42, 0xf2,
+	0x18, 0x70, 0x4e, 0x65, 0x25, 0x3f, 0xe4, 0x52, 0x54, 0x94, 0xd0, 0xd7, 0x9a, 0x74, 0x85, 0x0c,
+	0x4e, 0x53, 0xa5, 0x17, 0x22, 0x23, 0xe6, 0x45, 0xde, 0x34, 0x48, 0xda, 0x92, 0x67, 0x70, 0xb1,
+	0xc7, 0xeb, 0x22, 0x57, 0x9a, 0x30, 0x82, 0xc1, 0x72, 0x27, 0xdb, 0x47, 0xae, 0x84, 0x57, 0x00,
+	0x45, 0x29, 0x37, 0xa2, 0xa2, 0x17, 0xfa, 0x61, 0x7d, 0x03, 0x38, 0x0a, 0x8e, 0xe1, 0x58, 0x89,
+	0x8c, 0x34, 0xf3, 0x23, 0x7f, 0x1a, 0x24, 0x4d, 0xc1, 0xaf, 0x61, 0xf0, 0x26, 0xd5, 0xaa, 0xf5,
+	0x35, 0x04, 0x3f, 0xd3, 0x2b, 0xdb, 0xbe, 0x3e, 0xf2, 0x08, 0xce, 0x1b, 0xc0, 0x1a, 0xb1, 0x44,
+	0x7f, 0x47, 0xcc, 0xe1, 0x66, 0xcf, 0xb1, 0xa2, 0x6f, 0xf1, 0xb9, 0xc8, 0xad, 0x20, 0x73, 0xd5,
+	0x36, 0x0f, 0xe1, 0xcc, 0x4e, 0xa9, 0x99, 0x67, 0x4c, 0x6c, 0x6b, 0x3e, 0x83, 0x89, 0x79, 0x49,
+	0xa9, 0xd3, 0xeb, 0x69, 0x43, 0xea, 0x9f, 0xac, 0x1e, 0x7e, 0x3d, 0x18, 0x39, 0xf8, 0xb3, 0xd6,
+	0x6b, 0x2a, 0xf1, 0x11, 0x02, 0x73, 0xaa, 0x6f, 0x70, 0x12, 0xd7, 0xfb, 0xe8, 0x6e, 0x20, 0x64,
+	0xdd, 0x8b, 0x66, 0x42, 0xde, 0xc3, 0x3b, 0x38, 0xaa, 0x67, 0xc6, 0xa1, 0x61, 0x9c, 0x7c, 0xc2,
+	0x91, 0xa3, 0x6c, 0xf1, 0x14, 0xc6, 0xaf, 0xaa, 0x1b, 0x01, 0xde, 0x76, 0x3f, 0x71, 0x28, 0x9b,
+	0xf0, 0xd2, 0xb0, 0x07, 0x22, 0xe0, 0xbd, 0x7b, 0xef, 0xfd, 0xc4, 0xfc, 0x54, 0xb3, 0xbf, 0x00,
+	0x00, 0x00, 0xff, 0xff, 0xb7, 0x86, 0xa7, 0x99, 0x61, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -244,6 +331,7 @@ const _ = grpc.SupportPackageIsVersion4
 type CertificateIssuerClient interface {
 	IssueCert(ctx context.Context, in *CertificateRequest, opts ...grpc.CallOption) (*CertificateResponse, error)
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
+	OnCertificateRenewal(ctx context.Context, in *CertificateRenewalNotificationRequest, opts ...grpc.CallOption) (CertificateIssuer_OnCertificateRenewalClient, error)
 }
 
 type certificateIssuerClient struct {
@@ -272,10 +360,43 @@ func (c *certificateIssuerClient) Ping(ctx context.Context, in *PingRequest, opt
 	return out, nil
 }
 
+func (c *certificateIssuerClient) OnCertificateRenewal(ctx context.Context, in *CertificateRenewalNotificationRequest, opts ...grpc.CallOption) (CertificateIssuer_OnCertificateRenewalClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_CertificateIssuer_serviceDesc.Streams[0], "/api.CertificateIssuer/OnCertificateRenewal", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &certificateIssuerOnCertificateRenewalClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type CertificateIssuer_OnCertificateRenewalClient interface {
+	Recv() (*RenewedCertificateEvent, error)
+	grpc.ClientStream
+}
+
+type certificateIssuerOnCertificateRenewalClient struct {
+	grpc.ClientStream
+}
+
+func (x *certificateIssuerOnCertificateRenewalClient) Recv() (*RenewedCertificateEvent, error) {
+	m := new(RenewedCertificateEvent)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // CertificateIssuerServer is the server API for CertificateIssuer service.
 type CertificateIssuerServer interface {
 	IssueCert(context.Context, *CertificateRequest) (*CertificateResponse, error)
 	Ping(context.Context, *PingRequest) (*PingResponse, error)
+	OnCertificateRenewal(*CertificateRenewalNotificationRequest, CertificateIssuer_OnCertificateRenewalServer) error
 }
 
 func RegisterCertificateIssuerServer(s *grpc.Server, srv CertificateIssuerServer) {
@@ -318,6 +439,27 @@ func _CertificateIssuer_Ping_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CertificateIssuer_OnCertificateRenewal_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(CertificateRenewalNotificationRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(CertificateIssuerServer).OnCertificateRenewal(m, &certificateIssuerOnCertificateRenewalServer{stream})
+}
+
+type CertificateIssuer_OnCertificateRenewalServer interface {
+	Send(*RenewedCertificateEvent) error
+	grpc.ServerStream
+}
+
+type certificateIssuerOnCertificateRenewalServer struct {
+	grpc.ServerStream
+}
+
+func (x *certificateIssuerOnCertificateRenewalServer) Send(m *RenewedCertificateEvent) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _CertificateIssuer_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "api.CertificateIssuer",
 	HandlerType: (*CertificateIssuerServer)(nil),
@@ -331,6 +473,12 @@ var _CertificateIssuer_serviceDesc = grpc.ServiceDesc{
 			Handler:    _CertificateIssuer_Ping_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "OnCertificateRenewal",
+			Handler:       _CertificateIssuer_OnCertificateRenewal_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "api.proto",
 }

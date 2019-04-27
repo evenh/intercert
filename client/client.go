@@ -118,9 +118,10 @@ func configureTasks(client api.CertificateIssuerClient, config *config.ClientCon
 	var tasks []Job
 
 	pinger := *Register(pingServer(client), "Ping intercert host", 10*time.Minute, false)
+	renewalHandler := *Register(watchForEvents(config.Domains, client), "Watch for certificate renewal events", 0 * time.Second, true)
 	desiredCheck := *Register(ensureCertsFromConfig(storage, config.Domains), "Ensure configured domains is present", 1*time.Hour, true)
 
-	tasks = append(tasks, pinger, desiredCheck)
+	tasks = append(tasks, pinger, renewalHandler, desiredCheck)
 
 	return tasks
 }
