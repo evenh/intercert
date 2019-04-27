@@ -36,7 +36,7 @@ type IssuerService struct {
 // NewIssuerService constructs a new instance with a predefined config
 func NewIssuerService(config *config.ServerConfig, userAgent string) *IssuerService {
 	certmagic.UserAgent = userAgent
-	
+
 	issuer := new(IssuerService)
 	issuer.renewalEvents = make(chan string)
 
@@ -150,7 +150,7 @@ func (s IssuerService) Ping(ctx context.Context, req *api.PingRequest) (*api.Pin
 	return &api.PingResponse{Msg: "pong"}, nil
 }
 
-// Notifies the client about certificates that has been renewed server side
+// OnCertificateRenewal notifies the client about certificates that has been renewed server side
 func (s IssuerService) OnCertificateRenewal(req *api.CertificateRenewalNotificationRequest, res api.CertificateIssuer_OnCertificateRenewalServer) error {
 	logClient(res.Context(), "OnCertificateRenewal")
 	names := req.DnsNames
