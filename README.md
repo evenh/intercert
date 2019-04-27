@@ -1,4 +1,4 @@
-# intercert [![Build Status](https://travis-ci.org/evenh/intercert.svg?branch=master)](https://travis-ci.org/evenh/intercert) [![Go Report Card](https://goreportcard.com/badge/github.com/evenh/intercert)](https://goreportcard.com/report/github.com/evenh/intercert) [![codecov](https://codecov.io/gh/evenh/intercert/branch/master/graph/badge.svg)](https://codecov.io/gh/evenh/intercert)
+# intercert [![Build Status](https://travis-ci.org/evenh/intercert.svg?branch=master)](https://travis-ci.org/evenh/intercert) [![Go Report Card](https://goreportcard.com/badge/github.com/evenh/intercert)](https://goreportcard.com/report/github.com/evenh/intercert)
 
 _Brings Let's Encrypt to LAN and other locked down environments._
 
