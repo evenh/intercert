@@ -42,21 +42,23 @@ func (j *Job) start() {
 	}
 	j.firstRun = false
 
-	go func() {
-		for {
-			// Sleep for the predetermined time.
-			time.Sleep(j.delay)
+	if j.delay > 0 * time.Second {
+		go func() {
+			for {
+				// Sleep for the predetermined time.
+				time.Sleep(j.delay)
 
-			select {
-			// Check for the 'stop' signal.
-			case <-j.stop:
-				return
-			// Execute the function.
-			default:
-				j.fn()
+				select {
+				// Check for the 'stop' signal.
+				case <-j.stop:
+					return
+				// Execute the function.
+				default:
+					j.fn()
+				}
 			}
-		}
-	}()
+		}()
+	}
 }
 
 // Register schedules a function for execution, to be invoked repeated with a delay of

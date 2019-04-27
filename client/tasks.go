@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/evenh/intercert/api"
 	"github.com/go-acme/lego/log"
+	"io"
+	"os"
 )
 
 func pingServer(client api.CertificateIssuerClient) func() {
@@ -13,6 +15,40 @@ func pingServer(client api.CertificateIssuerClient) func() {
 		if err != nil {
 			log.Warnf("Could not ping intercert host: %v", err)
 		}
+	}
+}
+
+func watchForEvents(domains []string, client api.CertificateIssuerClient) func() {
+	return func() {
+		renewalStream, err := client.OnCertificateRenewal(context.Background(), &api.CertificateRenewalNotificationRequest{
+			DnsNames: domains,
+		})
+
+		if err != nil {
+			log.Fatalf("Could not subscribe to renewal events: %v", err)
+			os.Exit(1)
+		}
+
+		log.Infof("Listening for certificate renewal events")
+
+		go func() {
+			for {
+				in, err := renewalStream.Recv()
+
+				if err == io.EOF {
+					break
+				}
+
+				if err != nil {
+					log.Warnf("Got error while listening for renewal events: %v", err)
+				}
+
+				log.Infof("Got notice from server that certificate for %s has been renewed. Queuing up re-fetch!", in.DnsName)
+				job := NewCertReq(in.DnsName, true)
+				job.Submit()
+			}
+		}()
+
 	}
 }
 

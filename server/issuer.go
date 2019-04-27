@@ -5,6 +5,8 @@ import (
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/rsa"
+	"fmt"
+	"sort"
 	"time"
 
 	"github.com/go-acme/lego/certcrypto"
@@ -26,13 +28,15 @@ import (
 
 // IssuerService issues certificates to clients
 type IssuerService struct {
-	client    *certmagic.Config
-	whitelist Whitelist
+	client        *certmagic.Config
+	whitelist     Whitelist
+	renewalEvents chan string
 }
 
 // NewIssuerService constructs a new instance with a predefined config
 func NewIssuerService(config *config.ServerConfig) *IssuerService {
 	issuer := new(IssuerService)
+	issuer.renewalEvents = make(chan string)
 
 	// Configure DNS provider by delegating to xenolf/lego factory
 	dnsProvider, err := dns.NewDNSChallengeProviderByName(config.DNSProvider)
@@ -52,6 +56,12 @@ func NewIssuerService(config *config.ServerConfig) *IssuerService {
 		DNSProvider:             dnsProvider,
 		Storage:                 createStorage(config.Storage),
 		RenewDurationBefore:     config.RenewalThreshold,
+		OnEvent: func(eventName string, payload interface{}) {
+			// For now, we'll only care about certificates that are renewed
+			if eventName == "acme_cert_renewed" {
+				issuer.renewalEvents <- fmt.Sprintf("%s", payload)
+			}
+		},
 	}
 
 	// Construct the new certmagic instance
@@ -136,6 +146,30 @@ func (s IssuerService) Ping(ctx context.Context, req *api.PingRequest) (*api.Pin
 	logClient(ctx, "Ping")
 	// TODO: Auth for ping?
 	return &api.PingResponse{Msg: "pong"}, nil
+}
+
+// Notifies the client about certificates that has been renewed server side
+func (s IssuerService) OnCertificateRenewal(req *api.CertificateRenewalNotificationRequest, res api.CertificateIssuer_OnCertificateRenewalServer) error {
+	logClient(res.Context(), "OnCertificateRenewal")
+	names := req.DnsNames
+	sort.Strings(names)
+
+	for event := range s.renewalEvents {
+		for _, name := range names {
+			if strings.ToLower(name) == strings.ToLower(event) {
+				err := res.Send(&api.RenewedCertificateEvent{DnsName: event})
+
+				if err != nil {
+					log.Warnf("[%s] Could not send renewal event to clients", name)
+					return err
+				}
+
+				log.Infof("[%s] Notified clients that certificate has been renewed", name)
+			}
+		}
+	}
+
+	return nil
 }
 
 // from certmagic: encodePrivateKey marshals a EC or RSA private key into a PEM-encoded array of bytes.

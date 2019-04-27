@@ -27,9 +27,21 @@ message PingResponse {
     string msg = 2;
 }
 
+message CertificateRenewalNotificationRequest {
+    // A list of DNS names to monitor for renewals
+    repeated string dnsNames = 1;
+}
+
+// Response for a certificate that has been renewed on the server
+message RenewedCertificateEvent {
+    // Example: foo.bar.com
+    string dnsName = 1;
+}
+
 service CertificateIssuer {
     rpc IssueCert (CertificateRequest) returns (CertificateResponse) {
     }
     rpc Ping (PingRequest) returns (PingResponse) {
     }
+    rpc OnCertificateRenewal (CertificateRenewalNotificationRequest) returns (stream RenewedCertificateEvent) {}
 }
