@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"runtime"
 
@@ -39,7 +40,8 @@ func initConfig() {
 
 	// Try to read config
 	if err := viper.ReadInConfig(); err != nil {
-		PrintErrorAndExit(err)
+		errMsg := fmt.Sprintf("Failed to read configuration: %v", err)
+		PrintErrorAndExit(errors.New(errMsg))
 	}
 }
 
