@@ -27,10 +27,10 @@ var clientCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		c := config.ClientConfig{
-			Hostname:         viper.GetString("client.host"),
-			Port:             viper.GetInt("client.port"),
-			Storage:          viper.GetString("client.storage"),
-			Domains:          viper.GetStringSlice("client.domains"),
+			Hostname: viper.GetString("client.host"),
+			Port:     viper.GetInt("client.port"),
+			Storage:  viper.GetString("client.storage"),
+			Domains:  viper.GetStringSlice("client.domains"),
 		}
 
 		client.StartClient(&c, UserAgent())

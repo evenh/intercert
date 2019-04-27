@@ -42,7 +42,7 @@ func (j *Job) start() {
 	}
 	j.firstRun = false
 
-	if j.delay > 0 * time.Second {
+	if j.delay > 0*time.Second {
 		go func() {
 			for {
 				// Sleep for the predetermined time.
