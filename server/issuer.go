@@ -34,7 +34,9 @@ type IssuerService struct {
 }
 
 // NewIssuerService constructs a new instance with a predefined config
-func NewIssuerService(config *config.ServerConfig) *IssuerService {
+func NewIssuerService(config *config.ServerConfig, userAgent string) *IssuerService {
+	certmagic.UserAgent = userAgent
+	
 	issuer := new(IssuerService)
 	issuer.renewalEvents = make(chan string)
 
