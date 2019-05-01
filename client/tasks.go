@@ -41,6 +41,7 @@ func watchForEvents(domains []string, client api.CertificateIssuerClient) func()
 
 				if err != nil {
 					log.Warnf("Got error while listening for renewal events: %v", err)
+					break
 				}
 
 				log.Infof("Got notice from server that certificate for %s has been renewed. Queuing up re-fetch!", in.DnsName)
