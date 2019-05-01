@@ -44,6 +44,19 @@ archives:
     files:
       - LICENSE
       - README.md
+
+dockers:
+  - image_templates:
+      - evenh/intercert
+      - "evenh/intercert:latest"
+      - "evenh/intercert:{{ .Version }}"
+    goos: linux
+    goarch: amd64
+    goarm: ''
+    binaries:
+      - intercert
+    dockerfile: Dockerfile.goreleaser
+
 checksum:
   name_template: 'checksums.txt'
 snapshot:
