@@ -81,6 +81,7 @@ func NewIssuerService(config *config.ServerConfig, userAgent string) *IssuerServ
 	whitelist := NewWhitelist(config.Domains)
 	issuer.whitelist = whitelist
 
+	log.Infof("Using ACME directory: %s", config.Directory)
 	log.Infof("Certificate issuer service configured - certificates will be renewed %v before expiry", config.RenewalThreshold)
 
 	return issuer
