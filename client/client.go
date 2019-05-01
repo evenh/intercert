@@ -30,7 +30,7 @@ func StartClient(config *config.ClientConfig, userAgent string) {
 	log.Infof("Configuring connection to %s for gRPC operations", config.GetDialAddr())
 
 	// Configure connection
-	// TODO: Not run insecure
+	// TODO: Use TLS for encrypting connection (with configurable certs and a sane default)
 	conn, err := grpc.Dial(
 		config.GetDialAddr(),
 		grpc.WithBackoffConfig(grpc.DefaultBackoffConfig),

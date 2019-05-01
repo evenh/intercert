@@ -18,8 +18,10 @@ func pingServer(client api.CertificateIssuerClient) func() {
 	}
 }
 
+// Listen for events from the server, indicating that a certificate has been renewed with ACME
 func watchForEvents(domains []string, client api.CertificateIssuerClient) func() {
 	return func() {
+		// TODO: Automatic resubscribe when a stream dies for some reason (e.g. server goes down)
 		renewalStream, err := client.OnCertificateRenewal(context.Background(), &api.CertificateRenewalNotificationRequest{
 			DnsNames: domains,
 		})
