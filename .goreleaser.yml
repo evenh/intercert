@@ -30,19 +30,20 @@ builds:
       goarch: i386
     - goos: windows
       goarch: arm64
-archive:
-  replacements:
-    darwin: macOS
-    linux: Linux
-    windows: Windows
-    amd64: x86_64
-  format: tar.gz
-  format_overrides:
-    - goos: windows
-      format: zip
-  files:
-    - LICENSE
-    - README.md
+archives:
+  - id: distribution
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+    replacements:
+      darwin: macOS
+      linux: Linux
+      windows: Windows
+      amd64: x86_64
+    files:
+      - LICENSE
+      - README.md
 checksum:
   name_template: 'checksums.txt'
 snapshot:
