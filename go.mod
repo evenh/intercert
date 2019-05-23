@@ -57,7 +57,7 @@ require (
 	github.com/transip/gotransip v5.8.1+incompatible // indirect
 	golang.org/x/time v0.0.0-20181108054448-85acf8d2951c // indirect
 	google.golang.org/api v0.4.0 // indirect
-	google.golang.org/grpc v1.20.1
+	google.golang.org/grpc v1.21.0
 	gopkg.in/ini.v1 v1.39.3 // indirect
 	gopkg.in/ns1/ns1-go.v2 v2.0.0-20181129155039-623a34768976 // indirect
 	gopkg.in/resty.v1 v1.12.0 // indirect
