@@ -51,7 +51,7 @@ require (
 	github.com/sirupsen/logrus v1.2.0 // indirect
 	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
 	github.com/spf13/cobra v0.0.4
-	github.com/spf13/viper v1.3.2
+	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.3.0
 	github.com/timewasted/linode v0.0.0-20160829202747-37e84520dcf7 // indirect
 	github.com/transip/gotransip v5.8.1+incompatible // indirect
