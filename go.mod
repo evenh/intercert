@@ -16,13 +16,13 @@ require (
 	github.com/cloudflare/cloudflare-go v0.8.5 // indirect
 	github.com/cpu/goacmedns v0.0.1 // indirect
 	github.com/decker502/dnspod-go v0.0.0-20180416134550-83a3ba562b04 // indirect
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/dimchansky/utfbom v1.0.0 // indirect
 	github.com/dnaeon/go-vcr v1.0.1 // indirect
 	github.com/dnsimple/dnsimple-go v0.21.0 // indirect
 	github.com/exoscale/egoscale v0.14.3 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/go-acme/lego v2.6.0+incompatible
+	github.com/go-errors/errors v1.0.1 // indirect
 	github.com/go-ini/ini v1.39.3 // indirect
 	github.com/go-resty/resty v1.10.3 // indirect
 	github.com/golang/protobuf v1.3.1
@@ -31,11 +31,12 @@ require (
 	github.com/gophercloud/gophercloud v0.0.0-20190424031112-b9b92a825806 // indirect
 	github.com/h2non/gock v0.0.0-00010101000000-000000000000 // indirect
 	github.com/iij/doapi v0.0.0-20180911005243-8803795a9b7b // indirect
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.0.0-20151117175822-3433f3ea46d9 // indirect
 	github.com/json-iterator/go v1.1.5 // indirect
 	github.com/juju/ratelimit v1.0.1 // indirect
 	github.com/kolo/xmlrpc v0.0.0-20181023172212-16bdd962781d // indirect
+	github.com/labbsr0x/bindman-dns-webhook v1.0.0 // indirect
+	github.com/labbsr0x/goh v0.0.0-20190510171137-94bcf1cb07b7 // indirect
 	github.com/linode/linodego v0.5.1 // indirect
 	github.com/mholt/certmagic v0.5.1
 	github.com/mitchellh/go-homedir v1.1.0
@@ -48,19 +49,16 @@ require (
 	github.com/ovh/go-ovh v0.0.0-20181109152953-ba5adb4cf014 // indirect
 	github.com/pkg/errors v0.8.1
 	github.com/sacloud/libsacloud v1.21.1 // indirect
-	github.com/sirupsen/logrus v1.2.0 // indirect
 	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
 	github.com/spf13/cobra v0.0.4
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.3.0
 	github.com/timewasted/linode v0.0.0-20160829202747-37e84520dcf7 // indirect
 	github.com/transip/gotransip v5.8.1+incompatible // indirect
-	golang.org/x/time v0.0.0-20181108054448-85acf8d2951c // indirect
 	google.golang.org/api v0.4.0 // indirect
 	google.golang.org/grpc v1.21.1
 	gopkg.in/ini.v1 v1.39.3 // indirect
 	gopkg.in/ns1/ns1-go.v2 v2.0.0-20181129155039-623a34768976 // indirect
-	gopkg.in/resty.v1 v1.12.0 // indirect
 )
 
 replace github.com/go-resty/resty => gopkg.in/resty.v1 v1.10.3
