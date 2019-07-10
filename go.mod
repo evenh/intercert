@@ -25,7 +25,7 @@ require (
 	github.com/go-errors/errors v1.0.1 // indirect
 	github.com/go-ini/ini v1.39.3 // indirect
 	github.com/go-resty/resty v1.10.3 // indirect
-	github.com/golang/protobuf v1.3.1
+	github.com/golang/protobuf v1.3.2
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/google/uuid v0.0.0-20161128191214-064e2069ce9c // indirect
 	github.com/gophercloud/gophercloud v0.0.0-20190424031112-b9b92a825806 // indirect
