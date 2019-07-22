@@ -21,7 +21,7 @@ require (
 	github.com/dnsimple/dnsimple-go v0.21.0 // indirect
 	github.com/exoscale/egoscale v0.14.3 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
-	github.com/go-acme/lego v2.6.0+incompatible
+	github.com/go-acme/lego v2.7.0+incompatible
 	github.com/go-errors/errors v1.0.1 // indirect
 	github.com/go-ini/ini v1.39.3 // indirect
 	github.com/go-resty/resty v1.10.3 // indirect
