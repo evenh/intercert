@@ -56,7 +56,7 @@ require (
 	github.com/timewasted/linode v0.0.0-20160829202747-37e84520dcf7 // indirect
 	github.com/transip/gotransip v5.8.1+incompatible // indirect
 	google.golang.org/api v0.4.0 // indirect
-	google.golang.org/grpc v1.21.1
+	google.golang.org/grpc v1.22.1
 	gopkg.in/ini.v1 v1.39.3 // indirect
 	gopkg.in/ns1/ns1-go.v2 v2.0.0-20181129155039-623a34768976 // indirect
 )
