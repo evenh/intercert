@@ -71,6 +71,8 @@ github.com/go-acme/lego v2.5.0+incompatible h1:5fNN9yRQfv8ymH3DSsxla+4aYeQt2IgfZ
 github.com/go-acme/lego v2.5.0+incompatible/go.mod h1:yzMNe9CasVUhkquNvti5nAtPmG94USbYxYrZfTkIn0M=
 github.com/go-acme/lego v2.6.0+incompatible h1:KxcEWOF5hKtgou4xIqPaXSRF9DoO4OJ90ndwdK6YH/k=
 github.com/go-acme/lego v2.6.0+incompatible/go.mod h1:yzMNe9CasVUhkquNvti5nAtPmG94USbYxYrZfTkIn0M=
+github.com/go-acme/lego v2.7.2+incompatible h1:ThhpPBgf6oa9X/vRd0kEmWOsX7+vmYdckmGZSb+FEp0=
+github.com/go-acme/lego v2.7.2+incompatible/go.mod h1:yzMNe9CasVUhkquNvti5nAtPmG94USbYxYrZfTkIn0M=
 github.com/go-cmd/cmd v1.0.5/go.mod h1:y8q8qlK5wQibcw63djSl/ntiHUHXHGdCkPk0j4QeW4s=
 github.com/go-errors/errors v1.0.1 h1:LUHzmkK3GUKUrL/1gfBUxAHzcev3apQlezX/+O7ma6w=
 github.com/go-errors/errors v1.0.1/go.mod h1:f4zRHt4oKfwPJE5k8C9vpYG+aDHdBFUsgrm6/TyX73Q=
