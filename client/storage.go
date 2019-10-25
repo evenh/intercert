@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/evenh/intercert/api"
-	"github.com/go-acme/lego/log"
+	"github.com/go-acme/lego/v3/log"
 	"github.com/pkg/errors"
 )
 

@@ -3,7 +3,7 @@ package client
 import (
 	"context"
 	"github.com/evenh/intercert/api"
-	"github.com/go-acme/lego/log"
+	"github.com/go-acme/lego/v3/log"
 	"io"
 	"os"
 )

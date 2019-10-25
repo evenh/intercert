@@ -9,7 +9,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/go-acme/lego/certcrypto"
+	"github.com/go-acme/lego/v3/certcrypto"
 
 	"crypto/tls"
 	"crypto/x509"
@@ -18,8 +18,8 @@ import (
 
 	"github.com/evenh/intercert/api"
 	"github.com/evenh/intercert/config"
-	"github.com/go-acme/lego/log"
-	"github.com/go-acme/lego/providers/dns"
+	"github.com/go-acme/lego/v3/log"
+	"github.com/go-acme/lego/v3/providers/dns"
 	"github.com/mholt/certmagic"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc/metadata"
@@ -103,7 +103,8 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateReques
 	}
 
 	// Hand over to certmagic
-	err = s.client.Manage([]string{req.DnsName})
+	// TODO: Consider ManageAsync
+	err = s.client.ManageSync([]string{req.DnsName})
 
 	if err != nil {
 		log.Warnf("[%s] Failed to obtain certificate: %v", req.DnsName, err)

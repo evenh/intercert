@@ -3,7 +3,7 @@ package cmd
 import (
 	"os"
 
-	"github.com/go-acme/lego/log"
+	"github.com/go-acme/lego/v3/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

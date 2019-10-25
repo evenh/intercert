@@ -3,7 +3,7 @@ package client
 import (
 	"time"
 
-	"github.com/go-acme/lego/log"
+	"github.com/go-acme/lego/v3/log"
 )
 
 // From https://github.com/KyleBanks/go-kit/blob/master/job/job.go
