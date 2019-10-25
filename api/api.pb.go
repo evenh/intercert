@@ -8,6 +8,8 @@ import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -397,6 +399,20 @@ type CertificateIssuerServer interface {
 	IssueCert(context.Context, *CertificateRequest) (*CertificateResponse, error)
 	Ping(context.Context, *PingRequest) (*PingResponse, error)
 	OnCertificateRenewal(*CertificateRenewalNotificationRequest, CertificateIssuer_OnCertificateRenewalServer) error
+}
+
+// UnimplementedCertificateIssuerServer can be embedded to have forward compatible implementations.
+type UnimplementedCertificateIssuerServer struct {
+}
+
+func (*UnimplementedCertificateIssuerServer) IssueCert(ctx context.Context, req *CertificateRequest) (*CertificateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method IssueCert not implemented")
+}
+func (*UnimplementedCertificateIssuerServer) Ping(ctx context.Context, req *PingRequest) (*PingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
+}
+func (*UnimplementedCertificateIssuerServer) OnCertificateRenewal(req *CertificateRenewalNotificationRequest, srv CertificateIssuer_OnCertificateRenewalServer) error {
+	return status.Errorf(codes.Unimplemented, "method OnCertificateRenewal not implemented")
 }
 
 func RegisterCertificateIssuerServer(s *grpc.Server, srv CertificateIssuerServer) {
