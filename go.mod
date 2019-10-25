@@ -22,7 +22,6 @@ require (
 	github.com/exoscale/egoscale v0.14.3 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/go-acme/lego v2.6.0+incompatible
-	github.com/go-errors/errors v1.0.1 // indirect
 	github.com/go-ini/ini v1.39.3 // indirect
 	github.com/go-resty/resty v1.10.3 // indirect
 	github.com/golang/protobuf v1.3.2
@@ -36,7 +35,7 @@ require (
 	github.com/juju/ratelimit v1.0.1 // indirect
 	github.com/kolo/xmlrpc v0.0.0-20181023172212-16bdd962781d // indirect
 	github.com/labbsr0x/bindman-dns-webhook v1.0.0 // indirect
-	github.com/labbsr0x/goh v0.0.0-20190510171137-94bcf1cb07b7 // indirect
+	github.com/labbsr0x/goh v1.0.1 // indirect
 	github.com/linode/linodego v0.5.1 // indirect
 	github.com/mholt/certmagic v0.6.2
 	github.com/mitchellh/go-homedir v1.1.0
