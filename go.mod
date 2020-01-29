@@ -14,5 +14,5 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.4.0
 	github.com/transip/gotransip v5.8.1+incompatible // indirect
-	google.golang.org/grpc v1.24.0
+	google.golang.org/grpc v1.27.0
 )
