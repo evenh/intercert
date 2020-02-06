@@ -7,7 +7,7 @@ require (
 	github.com/dnaeon/go-vcr v1.0.1 // indirect
 	github.com/go-acme/lego/v3 v3.1.0
 	github.com/golang/protobuf v1.3.2
-	github.com/mholt/certmagic v0.8.3
+	github.com/mholt/certmagic v0.9.2
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/errors v0.8.1
 	github.com/spf13/cobra v0.0.5
