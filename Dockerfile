@@ -1,7 +1,7 @@
 ARG INTERCERT_VERSION="DEV-SNAPSHOT"
 
 # First stage: build the executable.
-FROM golang:1.13-alpine AS builder
+FROM golang:1.15.8-alpine AS builder
 
 # Create the user and group files that will be used in the running container to
 # run the process as an unprivileged user.
