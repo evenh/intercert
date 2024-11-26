@@ -10,7 +10,7 @@ require (
 	github.com/mholt/certmagic v0.8.3
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pkg/errors v0.8.1
-	github.com/spf13/cobra v0.0.5
+	github.com/spf13/cobra v0.0.7
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.4.0
 	github.com/transip/gotransip v5.8.1+incompatible // indirect
