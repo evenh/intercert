@@ -2,10 +2,11 @@ package client
 
 import (
 	"context"
-	"github.com/evenh/intercert/api"
-	"github.com/go-acme/lego/v3/log"
 	"io"
 	"os"
+
+	"github.com/evenh/intercert/api"
+	"github.com/go-acme/lego/v4/log"
 )
 
 func pingServer(client api.CertificateIssuerClient) func() {

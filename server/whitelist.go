@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/bobesa/go-domain-util/domainutil"
-	"github.com/go-acme/lego/v3/log"
+	"github.com/go-acme/lego/v4/log"
 )
 
 // Whitelist holds valid domains that certificates can be

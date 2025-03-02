@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/go-acme/lego/v3/log"
+	"github.com/go-acme/lego/v4/log"
 
 	"github.com/evenh/intercert/config"
 	"github.com/evenh/intercert/server"

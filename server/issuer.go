@@ -10,18 +10,18 @@ import (
 	"sort"
 	"time"
 
-	"github.com/go-acme/lego/v3/certcrypto"
+	"github.com/go-acme/lego/v4/certcrypto"
 
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
 	"strings"
 
+	"github.com/caddyserver/certmagic"
 	"github.com/evenh/intercert/api"
 	"github.com/evenh/intercert/config"
-	"github.com/go-acme/lego/v3/log"
-	"github.com/go-acme/lego/v3/providers/dns"
-	"github.com/mholt/certmagic"
+	"github.com/go-acme/lego/v4/log"
+	"github.com/go-acme/lego/v4/providers/dns"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
 )

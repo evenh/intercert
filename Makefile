@@ -13,9 +13,9 @@ proto:
 		echo "error: protoc not installed" >&2; \
 		exit 1; \
 	fi
-	go get -u -v github.com/golang/protobuf/protoc-gen-go
+	go get -u -v google.golang.org/protobuf/cmd/protoc-gen-go
 	for file in $$(git ls-files '*.proto'); do \
-		protoc -I $$(dirname $$file) --go_out=plugins=grpc:$$(dirname $$file) $$file; \
+		protoc -I $$(dirname $$file) --go_out=$$(dirname $$file) --go-grpc_out=$$(dirname $$file) $$file; \
 	done
 
 test:

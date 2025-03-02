@@ -6,7 +6,7 @@ import (
 
 	"github.com/evenh/intercert/api"
 	"github.com/evenh/intercert/config"
-	"github.com/go-acme/lego/v3/log"
+	"github.com/go-acme/lego/v4/log"
 	"google.golang.org/grpc"
 )
 
