@@ -1,6 +1,7 @@
 package client
 
 import (
+	"errors"
 	"os"
 	"path"
 	"sort"
@@ -9,7 +10,6 @@ import (
 
 	"github.com/evenh/intercert/api"
 	"github.com/go-acme/lego/v3/log"
-	"github.com/pkg/errors"
 )
 
 const (

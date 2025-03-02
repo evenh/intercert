@@ -5,6 +5,7 @@ import (
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/rsa"
+	"errors"
 	"fmt"
 	"sort"
 	"time"
@@ -21,7 +22,6 @@ import (
 	"github.com/go-acme/lego/v3/log"
 	"github.com/go-acme/lego/v3/providers/dns"
 	"github.com/mholt/certmagic"
-	"github.com/pkg/errors"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
 )
