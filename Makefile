@@ -9,21 +9,17 @@ build:
 	go build -race -ldflags "-s -w -X main.Version=DEV-SNAPSHOT -X main.Commit=$(COMMIT)" -o dist/intercert github.com/evenh/intercert
 
 proto:
-	@ if ! which protoc > /dev/null; then \
-		echo "error: protoc not installed" >&2; \
+	@ if ! which buf > /dev/null; then \
+		echo "error: buf not installed" >&2; \
 		exit 1; \
 	fi
-	go get -u -v google.golang.org/protobuf/cmd/protoc-gen-go
-	for file in $$(git ls-files '*.proto'); do \
-		protoc -I $$(dirname $$file) --go_out=$$(dirname $$file) --go-grpc_out=$$(dirname $$file) $$file; \
-	done
+	buf generate
 
 test:
-	go test -v -race -coverprofile=coverage.txt -covermode=atomic -cpu 1,4 github.com/evenh/intercert/...
+	go test -v github.com/evenh/intercert/...
 
 clean:
 	rm -rf ./dist
-	rm -f coverage.txt
 	go clean -i github.com/evenh/intercert/...
 
 .PHONY: \

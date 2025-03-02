@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/evenh/intercert/api"
+	api "github.com/evenh/intercert/pkg/api/v1alpha1"
 	"github.com/go-acme/lego/v4/log"
 )
 

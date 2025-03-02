@@ -1,0 +1,13 @@
+version: v2
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/evenh/intercert/pkg/api
+plugins:
+  - remote: buf.build/protocolbuffers/go:v1.36.5
+    out: pkg
+    opt: paths=source_relative
+  - remote: buf.build/grpc/go:v1.5.1
+    out: pkg
+    opt: paths=source_relative

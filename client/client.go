@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/evenh/intercert/api"
+	api "github.com/evenh/intercert/pkg/api/v1alpha1"
 	"github.com/evenh/intercert/config"
 	"github.com/go-acme/lego/v4/log"
 	"google.golang.org/grpc"

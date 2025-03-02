@@ -1,5 +1,5 @@
 syntax = "proto3";
-package api;
+package api.v1alpha1;
 
 // Request for a certificate to be issued
 message CertificateRequest {
