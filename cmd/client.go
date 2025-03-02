@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/evenh/intercert/client"
-	"github.com/evenh/intercert/config"
+	"github.com/evenh/intercert/pkg/client"
+	"github.com/evenh/intercert/pkg/config"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	api "github.com/evenh/intercert/pkg/api/v1alpha1"
-	"github.com/evenh/intercert/config"
+	"github.com/evenh/intercert/pkg/config"
 	"github.com/go-acme/lego/v4/log"
 	"google.golang.org/grpc"
 )

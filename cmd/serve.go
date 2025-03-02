@@ -4,10 +4,10 @@ import (
 	"errors"
 	"time"
 
+	"github.com/evenh/intercert/pkg/config"
+	"github.com/evenh/intercert/pkg/server"
 	"github.com/go-acme/lego/v4/log"
 
-	"github.com/evenh/intercert/config"
-	"github.com/evenh/intercert/server"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )

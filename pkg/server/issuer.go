@@ -10,6 +10,7 @@ import (
 	"sort"
 	"time"
 
+	"github.com/evenh/intercert/pkg/config"
 	"github.com/go-acme/lego/v4/certcrypto"
 
 	"crypto/tls"
@@ -19,7 +20,6 @@ import (
 
 	"github.com/caddyserver/certmagic"
 	api "github.com/evenh/intercert/pkg/api/v1alpha1"
-	"github.com/evenh/intercert/config"
 	"github.com/go-acme/lego/v4/log"
 	"github.com/go-acme/lego/v4/providers/dns"
 	"google.golang.org/grpc/metadata"
