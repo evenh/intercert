@@ -42,7 +42,7 @@ func (r *CertReq) Submit() {
 }
 
 // CertWorker is the actual worker routine that eats away from the queue
-func CertWorker(id int, client api.CertificateIssuerClient, storage *CertStorage) {
+func CertWorker(id int, client api.CertificateIssuerServiceClient, storage *CertStorage) {
 	var prefix = fmt.Sprintf("[worker-%d]", id)
 	for job := range JobQueue {
 
@@ -53,7 +53,7 @@ func CertWorker(id int, client api.CertificateIssuerClient, storage *CertStorage
 
 		log.Infof("%s Processing %s", prefix, job.DNSName)
 
-		res, err := client.IssueCert(context.TODO(), &api.CertificateRequest{DnsName: job.DNSName})
+		res, err := client.IssueCert(context.TODO(), &api.IssueCertRequest{DnsName: job.DNSName})
 
 		if err != nil {
 			log.Warnf("%s Encountered error while requesting certs for %s: %v", prefix, job.DNSName, err)

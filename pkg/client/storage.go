@@ -52,7 +52,7 @@ func (c *CertStorage) LocallyStoredDomains() ([]string, error) {
 }
 
 // Store certificates for a given API response and domain
-func (c *CertStorage) Store(domain string, response *api.CertificateResponse) error {
+func (c *CertStorage) Store(domain string, response *api.IssueCertResponse) error {
 	// Find disk locations
 	certFile, _ := c.absoluteFileName(domain, certificate)
 	keyFile, _ := c.absoluteFileName(domain, privateKey)

@@ -16,7 +16,7 @@ func StartServer(config *config.ServerConfig, userAgent string) {
 
 	issuerService := NewIssuerService(config, userAgent)
 
-	api.RegisterCertificateIssuerServer(s, issuerService)
+	api.RegisterCertificateIssuerServiceServer(s, issuerService)
 
 	ln, err := net.Listen("tcp", "0.0.0.0:"+strconv.Itoa(config.Port))
 

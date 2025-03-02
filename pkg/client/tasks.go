@@ -9,7 +9,7 @@ import (
 	"github.com/go-acme/lego/v4/log"
 )
 
-func pingServer(client api.CertificateIssuerClient) func() {
+func pingServer(client api.CertificateIssuerServiceClient) func() {
 	return func() {
 		_, err := client.Ping(context.Background(), &api.PingRequest{Msg: "ping"})
 
@@ -20,10 +20,10 @@ func pingServer(client api.CertificateIssuerClient) func() {
 }
 
 // Listen for events from the server, indicating that a certificate has been renewed with ACME
-func watchForEvents(domains []string, client api.CertificateIssuerClient) func() {
+func watchForEvents(domains []string, client api.CertificateIssuerServiceClient) func() {
 	return func() {
 		// TODO: Automatic resubscribe when a stream dies for some reason (e.g. server goes down)
-		renewalStream, err := client.OnCertificateRenewal(context.Background(), &api.CertificateRenewalNotificationRequest{
+		renewalStream, err := client.OnCertificateRenewal(context.Background(), &api.OnCertificateRenewalRequest{
 			DnsNames: domains,
 		})
 

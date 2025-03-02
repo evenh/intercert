@@ -46,7 +46,7 @@ func StartClient(config *config.ClientConfig, userAgent string) {
 	defer conn.Close()
 
 	// Create client from connection
-	client := api.NewCertificateIssuerClient(conn)
+	client := api.NewCertificateIssuerServiceClient(conn)
 
 	// Test connection
 	_, err = client.Ping(context.Background(), &api.PingRequest{Msg: "ping"})
@@ -114,7 +114,7 @@ func validateConfig(c *config.ClientConfig) error {
 	return nil
 }
 
-func configureTasks(client api.CertificateIssuerClient, config *config.ClientConfig, storage *CertStorage) []Job {
+func configureTasks(client api.CertificateIssuerServiceClient, config *config.ClientConfig, storage *CertStorage) []Job {
 	var tasks []Job
 
 	pinger := *Register(pingServer(client), "Ping intercert host", 10*time.Minute, false)

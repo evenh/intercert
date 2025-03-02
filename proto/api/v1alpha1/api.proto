@@ -2,17 +2,17 @@ syntax = "proto3";
 package api.v1alpha1;
 
 // Request for a certificate to be issued
-message CertificateRequest {
+message IssueCertRequest {
     // Example: foo.bar.com
-    string dnsName = 1;
+    string dns_name = 1;
 }
 
 // A successful response containing a issued certificate
-message CertificateResponse {
+message IssueCertResponse {
     // A blob containing the cert
     string certificate = 1;
     // A blob containing the private key
-    string privateKey = 2;
+    string private_key = 2;
     // The DNS names this certificate is valid for
     repeated string names = 3;
 }
@@ -27,21 +27,21 @@ message PingResponse {
     string msg = 2;
 }
 
-message CertificateRenewalNotificationRequest {
+message OnCertificateRenewalRequest {
     // A list of DNS names to monitor for renewals
-    repeated string dnsNames = 1;
+    repeated string dns_names = 1;
 }
 
 // Response for a certificate that has been renewed on the server
-message RenewedCertificateEvent {
+message OnCertificateRenewalResponse {
     // Example: foo.bar.com
-    string dnsName = 1;
+    string dns_name = 1;
 }
 
-service CertificateIssuer {
-    rpc IssueCert (CertificateRequest) returns (CertificateResponse) {
+service CertificateIssuerService {
+    rpc IssueCert (IssueCertRequest) returns (IssueCertResponse) {
     }
     rpc Ping (PingRequest) returns (PingResponse) {
     }
-    rpc OnCertificateRenewal (CertificateRenewalNotificationRequest) returns (stream RenewedCertificateEvent) {}
+    rpc OnCertificateRenewal (OnCertificateRenewalRequest) returns (stream OnCertificateRenewalResponse) {}
 }

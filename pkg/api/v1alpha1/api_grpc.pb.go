@@ -19,55 +19,55 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CertificateIssuer_IssueCert_FullMethodName            = "/api.v1alpha1.CertificateIssuer/IssueCert"
-	CertificateIssuer_Ping_FullMethodName                 = "/api.v1alpha1.CertificateIssuer/Ping"
-	CertificateIssuer_OnCertificateRenewal_FullMethodName = "/api.v1alpha1.CertificateIssuer/OnCertificateRenewal"
+	CertificateIssuerService_IssueCert_FullMethodName            = "/api.v1alpha1.CertificateIssuerService/IssueCert"
+	CertificateIssuerService_Ping_FullMethodName                 = "/api.v1alpha1.CertificateIssuerService/Ping"
+	CertificateIssuerService_OnCertificateRenewal_FullMethodName = "/api.v1alpha1.CertificateIssuerService/OnCertificateRenewal"
 )
 
-// CertificateIssuerClient is the client API for CertificateIssuer service.
+// CertificateIssuerServiceClient is the client API for CertificateIssuerService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CertificateIssuerClient interface {
-	IssueCert(ctx context.Context, in *CertificateRequest, opts ...grpc.CallOption) (*CertificateResponse, error)
+type CertificateIssuerServiceClient interface {
+	IssueCert(ctx context.Context, in *IssueCertRequest, opts ...grpc.CallOption) (*IssueCertResponse, error)
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
-	OnCertificateRenewal(ctx context.Context, in *CertificateRenewalNotificationRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[RenewedCertificateEvent], error)
+	OnCertificateRenewal(ctx context.Context, in *OnCertificateRenewalRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[OnCertificateRenewalResponse], error)
 }
 
-type certificateIssuerClient struct {
+type certificateIssuerServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCertificateIssuerClient(cc grpc.ClientConnInterface) CertificateIssuerClient {
-	return &certificateIssuerClient{cc}
+func NewCertificateIssuerServiceClient(cc grpc.ClientConnInterface) CertificateIssuerServiceClient {
+	return &certificateIssuerServiceClient{cc}
 }
 
-func (c *certificateIssuerClient) IssueCert(ctx context.Context, in *CertificateRequest, opts ...grpc.CallOption) (*CertificateResponse, error) {
+func (c *certificateIssuerServiceClient) IssueCert(ctx context.Context, in *IssueCertRequest, opts ...grpc.CallOption) (*IssueCertResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CertificateResponse)
-	err := c.cc.Invoke(ctx, CertificateIssuer_IssueCert_FullMethodName, in, out, cOpts...)
+	out := new(IssueCertResponse)
+	err := c.cc.Invoke(ctx, CertificateIssuerService_IssueCert_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *certificateIssuerClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
+func (c *certificateIssuerServiceClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, CertificateIssuer_Ping_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, CertificateIssuerService_Ping_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *certificateIssuerClient) OnCertificateRenewal(ctx context.Context, in *CertificateRenewalNotificationRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[RenewedCertificateEvent], error) {
+func (c *certificateIssuerServiceClient) OnCertificateRenewal(ctx context.Context, in *OnCertificateRenewalRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[OnCertificateRenewalResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &CertificateIssuer_ServiceDesc.Streams[0], CertificateIssuer_OnCertificateRenewal_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &CertificateIssuerService_ServiceDesc.Streams[0], CertificateIssuerService_OnCertificateRenewal_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &grpc.GenericClientStream[CertificateRenewalNotificationRequest, RenewedCertificateEvent]{ClientStream: stream}
+	x := &grpc.GenericClientStream[OnCertificateRenewalRequest, OnCertificateRenewalResponse]{ClientStream: stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -78,122 +78,123 @@ func (c *certificateIssuerClient) OnCertificateRenewal(ctx context.Context, in *
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CertificateIssuer_OnCertificateRenewalClient = grpc.ServerStreamingClient[RenewedCertificateEvent]
+type CertificateIssuerService_OnCertificateRenewalClient = grpc.ServerStreamingClient[OnCertificateRenewalResponse]
 
-// CertificateIssuerServer is the server API for CertificateIssuer service.
-// All implementations must embed UnimplementedCertificateIssuerServer
+// CertificateIssuerServiceServer is the server API for CertificateIssuerService service.
+// All implementations must embed UnimplementedCertificateIssuerServiceServer
 // for forward compatibility.
-type CertificateIssuerServer interface {
-	IssueCert(context.Context, *CertificateRequest) (*CertificateResponse, error)
+type CertificateIssuerServiceServer interface {
+	IssueCert(context.Context, *IssueCertRequest) (*IssueCertResponse, error)
 	Ping(context.Context, *PingRequest) (*PingResponse, error)
-	OnCertificateRenewal(*CertificateRenewalNotificationRequest, grpc.ServerStreamingServer[RenewedCertificateEvent]) error
-	mustEmbedUnimplementedCertificateIssuerServer()
+	OnCertificateRenewal(*OnCertificateRenewalRequest, grpc.ServerStreamingServer[OnCertificateRenewalResponse]) error
+	mustEmbedUnimplementedCertificateIssuerServiceServer()
 }
 
-// UnimplementedCertificateIssuerServer must be embedded to have
+// UnimplementedCertificateIssuerServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedCertificateIssuerServer struct{}
+type UnimplementedCertificateIssuerServiceServer struct{}
 
-func (UnimplementedCertificateIssuerServer) IssueCert(context.Context, *CertificateRequest) (*CertificateResponse, error) {
+func (UnimplementedCertificateIssuerServiceServer) IssueCert(context.Context, *IssueCertRequest) (*IssueCertResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method IssueCert not implemented")
 }
-func (UnimplementedCertificateIssuerServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
+func (UnimplementedCertificateIssuerServiceServer) Ping(context.Context, *PingRequest) (*PingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (UnimplementedCertificateIssuerServer) OnCertificateRenewal(*CertificateRenewalNotificationRequest, grpc.ServerStreamingServer[RenewedCertificateEvent]) error {
+func (UnimplementedCertificateIssuerServiceServer) OnCertificateRenewal(*OnCertificateRenewalRequest, grpc.ServerStreamingServer[OnCertificateRenewalResponse]) error {
 	return status.Errorf(codes.Unimplemented, "method OnCertificateRenewal not implemented")
 }
-func (UnimplementedCertificateIssuerServer) mustEmbedUnimplementedCertificateIssuerServer() {}
-func (UnimplementedCertificateIssuerServer) testEmbeddedByValue()                           {}
+func (UnimplementedCertificateIssuerServiceServer) mustEmbedUnimplementedCertificateIssuerServiceServer() {
+}
+func (UnimplementedCertificateIssuerServiceServer) testEmbeddedByValue() {}
 
-// UnsafeCertificateIssuerServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CertificateIssuerServer will
+// UnsafeCertificateIssuerServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CertificateIssuerServiceServer will
 // result in compilation errors.
-type UnsafeCertificateIssuerServer interface {
-	mustEmbedUnimplementedCertificateIssuerServer()
+type UnsafeCertificateIssuerServiceServer interface {
+	mustEmbedUnimplementedCertificateIssuerServiceServer()
 }
 
-func RegisterCertificateIssuerServer(s grpc.ServiceRegistrar, srv CertificateIssuerServer) {
-	// If the following call pancis, it indicates UnimplementedCertificateIssuerServer was
+func RegisterCertificateIssuerServiceServer(s grpc.ServiceRegistrar, srv CertificateIssuerServiceServer) {
+	// If the following call pancis, it indicates UnimplementedCertificateIssuerServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&CertificateIssuer_ServiceDesc, srv)
+	s.RegisterService(&CertificateIssuerService_ServiceDesc, srv)
 }
 
-func _CertificateIssuer_IssueCert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CertificateRequest)
+func _CertificateIssuerService_IssueCert_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IssueCertRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CertificateIssuerServer).IssueCert(ctx, in)
+		return srv.(CertificateIssuerServiceServer).IssueCert(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CertificateIssuer_IssueCert_FullMethodName,
+		FullMethod: CertificateIssuerService_IssueCert_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CertificateIssuerServer).IssueCert(ctx, req.(*CertificateRequest))
+		return srv.(CertificateIssuerServiceServer).IssueCert(ctx, req.(*IssueCertRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CertificateIssuer_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CertificateIssuerService_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CertificateIssuerServer).Ping(ctx, in)
+		return srv.(CertificateIssuerServiceServer).Ping(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CertificateIssuer_Ping_FullMethodName,
+		FullMethod: CertificateIssuerService_Ping_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CertificateIssuerServer).Ping(ctx, req.(*PingRequest))
+		return srv.(CertificateIssuerServiceServer).Ping(ctx, req.(*PingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CertificateIssuer_OnCertificateRenewal_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(CertificateRenewalNotificationRequest)
+func _CertificateIssuerService_OnCertificateRenewal_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(OnCertificateRenewalRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(CertificateIssuerServer).OnCertificateRenewal(m, &grpc.GenericServerStream[CertificateRenewalNotificationRequest, RenewedCertificateEvent]{ServerStream: stream})
+	return srv.(CertificateIssuerServiceServer).OnCertificateRenewal(m, &grpc.GenericServerStream[OnCertificateRenewalRequest, OnCertificateRenewalResponse]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CertificateIssuer_OnCertificateRenewalServer = grpc.ServerStreamingServer[RenewedCertificateEvent]
+type CertificateIssuerService_OnCertificateRenewalServer = grpc.ServerStreamingServer[OnCertificateRenewalResponse]
 
-// CertificateIssuer_ServiceDesc is the grpc.ServiceDesc for CertificateIssuer service.
+// CertificateIssuerService_ServiceDesc is the grpc.ServiceDesc for CertificateIssuerService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CertificateIssuer_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.v1alpha1.CertificateIssuer",
-	HandlerType: (*CertificateIssuerServer)(nil),
+var CertificateIssuerService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.v1alpha1.CertificateIssuerService",
+	HandlerType: (*CertificateIssuerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "IssueCert",
-			Handler:    _CertificateIssuer_IssueCert_Handler,
+			Handler:    _CertificateIssuerService_IssueCert_Handler,
 		},
 		{
 			MethodName: "Ping",
-			Handler:    _CertificateIssuer_Ping_Handler,
+			Handler:    _CertificateIssuerService_Ping_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "OnCertificateRenewal",
-			Handler:       _CertificateIssuer_OnCertificateRenewal_Handler,
+			Handler:       _CertificateIssuerService_OnCertificateRenewal_Handler,
 			ServerStreams: true,
 		},
 	},

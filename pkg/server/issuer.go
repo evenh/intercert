@@ -28,6 +28,7 @@ import (
 
 // IssuerService issues certificates to clients
 type IssuerService struct {
+	api.UnimplementedCertificateIssuerServiceServer
 	client        *certmagic.Config
 	whitelist     Whitelist
 	renewalEvents chan string
@@ -88,7 +89,7 @@ func NewIssuerService(config *config.ServerConfig, userAgent string) *IssuerServ
 }
 
 // IssueCert issues a certificate for a valid request
-func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateRequest) (*api.CertificateResponse, error) {
+func (s IssuerService) IssueCert(ctx context.Context, req *api.IssueCertRequest) (*api.IssueCertResponse, error) {
 	// TODO: Validate auth in context
 	logClient(ctx, "IssueCert("+req.DnsName+")")
 
@@ -134,7 +135,7 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.CertificateReques
 		return nil, errors.New("Could not PEM encode certificates")
 	}
 
-	response := &api.CertificateResponse{
+	response := &api.IssueCertResponse{
 		Certificate: pemCert,
 		PrivateKey:  string(privateKey),
 		Names:       cert.Names,
@@ -153,7 +154,7 @@ func (s IssuerService) Ping(ctx context.Context, req *api.PingRequest) (*api.Pin
 }
 
 // OnCertificateRenewal notifies the client about certificates that has been renewed server side
-func (s IssuerService) OnCertificateRenewal(req *api.CertificateRenewalNotificationRequest, res api.CertificateIssuer_OnCertificateRenewalServer) error {
+func (s IssuerService) OnCertificateRenewal(req *api.OnCertificateRenewalRequest, res api.CertificateIssuerService_OnCertificateRenewalServer) error {
 	logClient(res.Context(), "OnCertificateRenewal")
 	names := req.DnsNames
 	sort.Strings(names)
@@ -161,7 +162,7 @@ func (s IssuerService) OnCertificateRenewal(req *api.CertificateRenewalNotificat
 	for event := range s.renewalEvents {
 		for _, name := range names {
 			if strings.ToLower(name) == strings.ToLower(event) {
-				err := res.Send(&api.RenewedCertificateEvent{DnsName: event})
+				err := res.Send(&api.OnCertificateRenewalResponse{DnsName: event})
 
 				if err != nil {
 					log.Warnf("[%s] Could not send renewal event to clients", name)
