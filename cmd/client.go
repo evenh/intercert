@@ -33,6 +33,6 @@ var clientCmd = &cobra.Command{
 			Domains:  viper.GetStringSlice("client.domains"),
 		}
 
-		client.StartClient(&c, UserAgent())
+		client.StartClient(&c, UserAgent(), zapLogger.Named("client"))
 	},
 }

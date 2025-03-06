@@ -33,6 +33,7 @@ type IssuerService struct {
 	api.UnimplementedCertificateIssuerServiceServer
 	client        *certmagic.Config
 	renewalEvents *chan string
+	whitelist     *whitelist
 	logger        *zap.Logger
 }
 
@@ -43,7 +44,7 @@ func NewIssuerService(config *config.ServerConfig, userAgent string, logger *zap
 	cmLogger := issuerLogger.Named("certmagic")
 
 	dnsProvider, err := dnsprovider.GetProvider(config.DNSProvider)
-	w := newWhitelist(config.Domains, issuerLogger.Named("whitelist"))
+	storage := createLocalStorage(config.Storage)
 
 	if err != nil {
 		issuerLogger.Fatal("Could not configure DNS provider", zap.Error(err))
@@ -73,10 +74,7 @@ func NewIssuerService(config *config.ServerConfig, userAgent string, logger *zap
 		},
 
 		MustStaple: false,
-		Storage:    createLocalStorage(config.Storage),
-		OnDemand: &certmagic.OnDemandConfig{
-			DecisionFunc: w.isDNSNameAllowed,
-		},
+		Storage:    storage,
 		OnEvent: func(ctx context.Context, eventName string, data map[string]any) error {
 			// For now, we'll only care about certificates that are renewed
 			if eventName == "cert_obtaining" && data["renewal"] == true {
@@ -100,6 +98,7 @@ func NewIssuerService(config *config.ServerConfig, userAgent string, logger *zap
 		renewalEvents: &renewalEvents,
 		client:        magic,
 		logger:        issuerLogger,
+		whitelist:     newWhitelist(config.Domains, logger.Named("whitelist")),
 	}
 
 	issuerLogger.Info("certificate issuer service configured",
@@ -119,9 +118,15 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.IssueCertRequest)
 
 	reqLog.Info("received certificate request")
 
+	err := s.whitelist.isDNSNameAllowed(req.DnsName)
+	if err != nil {
+		reqLog.Warn("dns name not allowed", zap.Error(err))
+		return nil, err
+	}
+
 	// Hand over to certmagic
 	// TODO: Consider ManageAsync
-	err := s.client.ManageSync(ctx, []string{req.DnsName})
+	err = s.client.ManageSync(ctx, []string{req.DnsName})
 
 	if err != nil {
 		reqLog.Warn("failed to obtain certificate", zap.Error(err))

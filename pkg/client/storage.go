@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	api "github.com/evenh/intercert/pkg/api/v1alpha1"
-	"github.com/go-acme/lego/v4/log"
+	"go.uber.org/zap"
 )
 
 const (
@@ -20,21 +20,22 @@ const (
 // CertStorage represents where the certificates is stored at the client side
 type CertStorage struct {
 	storageDirectory string
+	log              *zap.Logger
 }
 
 // NewCertStorage constructs an instance of the CertStorage struct, with validation
-func NewCertStorage(storageDirectory string) *CertStorage {
+func NewCertStorage(storageDirectory string, logger *zap.Logger) *CertStorage {
 	if _, err := os.Stat(storageDirectory); os.IsNotExist(err) {
 		err = os.MkdirAll(storageDirectory, 0777)
 
 		if err != nil {
-			log.Warnf("Could not create directory for certs: %v", err)
-			os.Exit(1)
+			logger.Fatal("could not create directory for certs: %v", zap.Error(err))
 		}
 	}
 
 	return &CertStorage{
 		storageDirectory: storageDirectory,
+		log:              logger,
 	}
 }
 
@@ -62,7 +63,9 @@ func (c *CertStorage) Store(domain string, response *api.IssueCertResponse) erro
 		keyFile:  response.PrivateKey,
 	}
 
-	log.Infof("Attempting to write cert data for %s", domain)
+	clog := c.log.With(zap.String("dns_name", domain), zap.String("location", certFile), zap.String("key", keyFile))
+
+	clog.Info("attempting to write cert data")
 
 	for location, content := range locationContent {
 		fh, err := os.OpenFile(location, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0600)
@@ -90,7 +93,7 @@ func (c *CertStorage) Store(domain string, response *api.IssueCertResponse) erro
 		}
 	}
 
-	log.Infof("Successfully wrote cert data for %s", domain)
+	clog.Info("successfully wrote cert data")
 	return nil
 }
 

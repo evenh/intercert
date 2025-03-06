@@ -3,10 +3,10 @@ package client
 import (
 	"context"
 	"io"
-	"os"
+	"slices"
 
 	api "github.com/evenh/intercert/pkg/api/v1alpha1"
-	"github.com/go-acme/lego/v4/log"
+	"go.uber.org/zap"
 )
 
 func pingServer(client api.CertificateIssuerServiceClient) func() {
@@ -14,7 +14,7 @@ func pingServer(client api.CertificateIssuerServiceClient) func() {
 		_, err := client.Ping(context.Background(), &api.PingRequest{Msg: "ping"})
 
 		if err != nil {
-			log.Warnf("Could not ping intercert host: %v", err)
+			logger.Warn("could not ping intercert host", zap.Error(err))
 		}
 	}
 }
@@ -28,11 +28,10 @@ func watchForEvents(domains []string, client api.CertificateIssuerServiceClient)
 		})
 
 		if err != nil {
-			log.Fatalf("Could not subscribe to renewal events: %v", err)
-			os.Exit(1)
+			logger.Fatal("could not watch for certificate renewal", zap.Error(err))
 		}
 
-		log.Infof("Listening for certificate renewal events")
+		logger.Info("listening for certificate renewal events")
 
 		go func() {
 			for {
@@ -43,11 +42,11 @@ func watchForEvents(domains []string, client api.CertificateIssuerServiceClient)
 				}
 
 				if err != nil {
-					log.Warnf("Got error while listening for renewal events: %v", err)
+					logger.Warn("got error while listening for renewal events", zap.Error(err))
 					break
 				}
 
-				log.Infof("Got notice from server that certificate for %s has been renewed. Queuing up re-fetch!", in.DnsName)
+				logger.Info("got notice from server that certificate has been renewed – queuing up a re-fetch job", zap.String("dns_name", in.DnsName))
 				job := NewCertReq(in.DnsName, true)
 				job.Submit()
 			}
@@ -62,26 +61,17 @@ func ensureCertsFromConfig(storage *CertStorage, wantedDomains []string) func() 
 		storedDomains, err := storage.LocallyStoredDomains()
 
 		if err != nil {
-			log.Warnf("Could not fetch stored certs: %v", err)
+			logger.Warn("could not fetch stored certs", zap.Error(err))
 			return
 		}
 
 		// Loop over domains that shall be present
 		for _, wantedDomain := range wantedDomains {
 
-			if !stringInSlice(wantedDomain, storedDomains) {
+			if !slices.Contains(storedDomains, wantedDomain) {
 				req := NewCertReq(wantedDomain, false)
 				req.Submit()
 			}
 		}
 	}
-}
-
-func stringInSlice(str string, list []string) bool {
-	for _, v := range list {
-		if v == str {
-			return true
-		}
-	}
-	return false
 }

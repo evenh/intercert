@@ -2,25 +2,30 @@ package client
 
 import (
 	"context"
-	"fmt"
+	"time"
 
 	api "github.com/evenh/intercert/pkg/api/v1alpha1"
-	"github.com/go-acme/lego/v4/log"
+	"go.uber.org/zap"
 )
 
-// JobQueue holds all active jobs
-var JobQueue = make(chan CertReq, 10)
+const (
+	maxAttempts     = 5
+	issuanceTimeout = 15 * time.Minute
+)
 
-// CertReq represents a certificate request
-type CertReq struct {
+// jobQueue holds all active jobs
+var jobQueue = make(chan certReq, 10)
+
+// certReq represents a certificate request
+type certReq struct {
 	DNSName  string
 	Renewal  bool
 	Attempts int
 }
 
-// NewCertReq constructs an instance of the CertReq struct
-func NewCertReq(dnsName string, renewal bool) CertReq {
-	return CertReq{
+// NewCertReq constructs an instance of the certReq struct
+func NewCertReq(dnsName string, renewal bool) certReq {
+	return certReq{
 		DNSName:  dnsName,
 		Renewal:  renewal,
 		Attempts: 0,
@@ -28,44 +33,42 @@ func NewCertReq(dnsName string, renewal bool) CertReq {
 }
 
 // Submit a job to the queue for processing
-func (r *CertReq) Submit() {
-	var operation string
-
-	if r.Renewal {
-		operation = "renewal"
-	} else {
-		operation = "initial certificates"
-	}
-
-	log.Infof("Submitting '%s' to job queue for %s", r.DNSName, operation)
-	JobQueue <- *r
+func (r *certReq) Submit() {
+	logger.Named("queue").Info("submitting job", zap.String("dns_name", r.DNSName), zap.Bool("renewal", r.Renewal))
+	jobQueue <- *r
 }
 
 // CertWorker is the actual worker routine that eats away from the queue
-func CertWorker(id int, client api.CertificateIssuerServiceClient, storage *CertStorage) {
-	var prefix = fmt.Sprintf("[worker-%d]", id)
-	for job := range JobQueue {
+func CertWorker(id int, client api.CertificateIssuerServiceClient, storage *CertStorage, logger *zap.Logger) {
+	for job := range jobQueue {
+		jobLog := logger.With(
+			zap.Int("worker_id", id),
+			zap.String("dns_name", job.DNSName),
+			zap.Bool("renewal", job.Renewal),
+		)
 
-		if job.Attempts >= 5 {
-			log.Warnf("%s Attempts for %s exceed 5, discarding job", prefix, job.DNSName)
+		if job.Attempts >= maxAttempts {
+			jobLog.Warn("max attempts reached, discarding job", zap.Int("attempts", job.Attempts))
 			return
 		}
 
-		log.Infof("%s Processing %s", prefix, job.DNSName)
+		jobLog.Info("processing job")
 
-		res, err := client.IssueCert(context.TODO(), &api.IssueCertRequest{DnsName: job.DNSName})
+		ctx, cancel := context.WithTimeout(context.Background(), issuanceTimeout)
+		res, err := client.IssueCert(ctx, &api.IssueCertRequest{DnsName: job.DNSName})
+		cancel()
 
 		if err != nil {
-			log.Warnf("%s Encountered error while requesting certs for %s: %v", prefix, job.DNSName, err)
+			jobLog.Warn("encountered error while requesting cert", zap.Int("attempts", job.Attempts), zap.Error(err))
 			job.Attempts++
-			log.Warnf("%s Increasing attempt counter to %d and re-queuing...", prefix, job.Attempts)
-			JobQueue <- job
+			jobLog.Warn("increasing attempt counter to and re-queuing...", zap.Int("attempts", job.Attempts))
+			jobQueue <- job
 		} else {
-			log.Infof("%s Successfully fetched certs for %s", prefix, job.DNSName)
+			jobLog.Info("successfully fetched certs")
 			err := storage.Store(job.DNSName, res)
 
 			if err != nil {
-				log.Warnf("Could not write cert data for %s: %v", job.DNSName, err)
+				jobLog.Warn("could not write cert data – job and data discarded", zap.Error(err))
 			}
 		}
 	}

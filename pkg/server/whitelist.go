@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"errors"
 	"strings"
 
@@ -39,7 +38,7 @@ func newWhitelist(domains []string, logger *zap.Logger) *whitelist {
 
 // Checks whether a DNS name (e.g. foo.bar.com) is allowed. If no domains is configured,
 // every DNS name will be allowed.
-func (w *whitelist) isDNSNameAllowed(_ context.Context, dnsName string) error {
+func (w *whitelist) isDNSNameAllowed(dnsName string) error {
 	// Empty whitelists allows everything
 	if len(w.domains) == 0 {
 		return nil
