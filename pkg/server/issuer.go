@@ -51,28 +51,7 @@ func NewIssuerService(config *config.ServerConfig, userAgent string, logger *zap
 	}
 
 	certmagicConfig := &certmagic.Config{
-		Logger: cmLogger,
-		Issuers: []certmagic.Issuer{
-			&certmagic.ACMEIssuer{
-				CA:                      config.Directory,
-				Email:                   config.Email,
-				Agreed:                  config.Agree,
-				DisableHTTPChallenge:    true,
-				DisableTLSALPNChallenge: true,
-				DNS01Solver: &certmagic.DNS01Solver{
-					DNSManager: certmagic.DNSManager{
-						DNSProvider: dnsProvider,
-						Logger:      cmLogger.Named("dnsprovider"),
-						//TTL:                0,
-						//PropagationDelay:   0,
-						//PropagationTimeout: 0,
-						//Resolvers:          nil,
-						//OverrideDomain:     "",
-					},
-				},
-			},
-		},
-
+		Logger:     cmLogger,
 		MustStaple: false,
 		Storage:    storage,
 		OnEvent: func(ctx context.Context, eventName string, data map[string]any) error {
@@ -84,6 +63,28 @@ func NewIssuerService(config *config.ServerConfig, userAgent string, logger *zap
 			return nil
 		},
 	}
+
+	// Must be constructed outside the config in order to have the mutex set
+	acmeIssuer := certmagic.NewACMEIssuer(certmagicConfig, certmagic.ACMEIssuer{
+		CA:                      config.Directory,
+		Email:                   config.Email,
+		Agreed:                  config.Agree,
+		DisableHTTPChallenge:    true,
+		DisableTLSALPNChallenge: true,
+		Logger:                  cmLogger.Named("acme"),
+		DNS01Solver: &certmagic.DNS01Solver{
+			DNSManager: certmagic.DNSManager{
+				DNSProvider: dnsProvider,
+				Logger:      cmLogger.Named("dnsprovider"),
+				TTL:         60,
+				//PropagationDelay:   0,
+				//PropagationTimeout: 0,
+				//Resolvers:          nil,
+				//OverrideDomain:     "",
+			},
+		},
+	})
+	certmagicConfig.Issuers = append(certmagicConfig.Issuers, acmeIssuer)
 
 	// Construct the new certmagic instance
 	magic := certmagic.New(certmagic.NewCache(certmagic.CacheOptions{
