@@ -37,24 +37,25 @@ var serveCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		c := config.ServerConfig{
-			Port:             viper.GetInt("server.port"),
-			Agree:            viper.GetBool("server.agree"),
-			Directory:        viper.GetString("server.directory"),
-			DNSProvider:      viper.GetString("server.dns-provider"),
-			Domains:          viper.GetStringSlice("server.domains"),
-			Email:            viper.GetString("server.email"),
-			Storage:          viper.GetString("server.storage"),
-			ExpiryCheckAt:    viper.GetDuration("server.expiry"),
-			RenewalThreshold: viper.GetDuration("server.renewalThreshold"),
+			Port:          viper.GetInt("server.port"),
+			Agree:         viper.GetBool("server.agree"),
+			Directory:     viper.GetString("server.directory"),
+			DNSProvider:   viper.GetString("server.dns-provider"),
+			Domains:       viper.GetStringSlice("server.domains"),
+			Email:         viper.GetString("server.email"),
+			Storage:       viper.GetString("server.storage"),
+			ExpiryCheckAt: viper.GetDuration("server.expiry"),
+			//RenewalThreshold: viper.GetDuration("server.renewalThreshold"),
 		}
 
 		if !c.Agree {
 			PrintErrorAndExit(errors.New("the ACME ToS must be agreed to"))
 		}
 
-		if c.RenewalThreshold > (24*time.Hour)*60 {
-			PrintErrorAndExit(errors.New("renewal threshold can't exceed 60 days"))
-		}
+		// TODO
+		//if c.RenewalThreshold > (24*time.Hour)*60 {
+		//	PrintErrorAndExit(errors.New("renewal threshold can't exceed 60 days"))
+		//}
 
 		server.StartServer(&c, UserAgent())
 		log.Infof("Listening on port %v", c.Port)

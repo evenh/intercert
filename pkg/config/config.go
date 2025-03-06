@@ -27,8 +27,6 @@ type ServerConfig struct {
 	Storage string
 	// How often to check for expired certificates
 	ExpiryCheckAt time.Duration
-	// How early before expiry shall certificates be renewed?
-	RenewalThreshold time.Duration
 }
 
 // ClientConfig holds configuration that is required for creating a client

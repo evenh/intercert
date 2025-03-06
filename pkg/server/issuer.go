@@ -10,18 +10,17 @@ import (
 	"sort"
 	"time"
 
-	"github.com/evenh/intercert/pkg/config"
-	"github.com/go-acme/lego/v4/certcrypto"
-
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
 	"strings"
 
+	"github.com/evenh/intercert/pkg/config"
+	"github.com/evenh/intercert/pkg/dnsprovider"
+
 	"github.com/caddyserver/certmagic"
 	api "github.com/evenh/intercert/pkg/api/v1alpha1"
 	"github.com/go-acme/lego/v4/log"
-	"github.com/go-acme/lego/v4/providers/dns"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/peer"
 )
@@ -41,29 +40,44 @@ func NewIssuerService(config *config.ServerConfig, userAgent string) *IssuerServ
 	issuer := new(IssuerService)
 	issuer.renewalEvents = make(chan string)
 
-	// Configure DNS provider by delegating to xenolf/lego factory
-	dnsProvider, err := dns.NewDNSChallengeProviderByName(config.DNSProvider)
+	dnsProvider, err := dnsprovider.GetProvider(config.DNSProvider)
 
 	if err != nil {
 		log.Fatalf("Could not configure DNS provider: %v", err)
 	}
 
 	certmagicConfig := &certmagic.Config{
-		CA:                      config.Directory,
-		Email:                   config.Email,
-		Agreed:                  config.Agree,
-		DisableHTTPChallenge:    true,
-		DisableTLSALPNChallenge: true,
-		KeyType:                 certcrypto.RSA4096,
-		MustStaple:              false,
-		DNSProvider:             dnsProvider,
-		Storage:                 createStorage(config.Storage),
-		RenewDurationBefore:     config.RenewalThreshold,
-		OnEvent: func(eventName string, payload interface{}) {
+		Issuers: []certmagic.Issuer{
+			&certmagic.ACMEIssuer{
+				CA:                      config.Directory,
+				Email:                   config.Email,
+				Agreed:                  config.Agree,
+				DisableHTTPChallenge:    true,
+				DisableTLSALPNChallenge: true,
+				DNS01Solver: &certmagic.DNS01Solver{
+					DNSManager: certmagic.DNSManager{
+						DNSProvider: dnsProvider,
+						//TTL:                0,
+						//PropagationDelay:   0,
+						//PropagationTimeout: 0,
+						//Resolvers:          nil,
+						//OverrideDomain:     "",
+						// Logger:             nil, TODO
+					},
+				},
+			},
+		},
+
+		MustStaple: false,
+		Storage:    createLocalStorage(config.Storage),
+
+		OnEvent: func(ctx context.Context, eventName string, data map[string]any) error {
 			// For now, we'll only care about certificates that are renewed
-			if eventName == "acme_cert_renewed" {
-				issuer.renewalEvents <- fmt.Sprintf("%s", payload)
+			if eventName == "cert_obtaining" && data["renewal"] == true {
+				issuer.renewalEvents <- fmt.Sprintf("%s", data["name"])
 			}
+
+			return nil
 		},
 	}
 
@@ -71,8 +85,8 @@ func NewIssuerService(config *config.ServerConfig, userAgent string) *IssuerServ
 	magic := certmagic.New(certmagic.NewCache(certmagic.CacheOptions{
 		RenewCheckInterval: config.ExpiryCheckAt,
 		OCSPCheckInterval:  1 * time.Hour,
-		GetConfigForCert: func(certificate certmagic.Certificate) (certmagic.Config, error) {
-			return *certmagicConfig, nil
+		GetConfigForCert: func(certificate certmagic.Certificate) (*certmagic.Config, error) {
+			return certmagicConfig, nil
 		},
 	}), *certmagicConfig)
 
@@ -83,7 +97,7 @@ func NewIssuerService(config *config.ServerConfig, userAgent string) *IssuerServ
 	issuer.whitelist = whitelist
 
 	log.Infof("Using ACME directory: %s", config.Directory)
-	log.Infof("Certificate issuer service configured - certificates will be renewed %v before expiry", config.RenewalThreshold)
+	log.Infof("Certificate issuer service configured")
 
 	return issuer
 }
@@ -105,14 +119,14 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.IssueCertRequest)
 
 	// Hand over to certmagic
 	// TODO: Consider ManageAsync
-	err = s.client.ManageSync([]string{req.DnsName})
+	err = s.client.ManageSync(ctx, []string{req.DnsName})
 
 	if err != nil {
 		log.Warnf("[%s] Failed to obtain certificate: %v", req.DnsName, err)
 		return nil, err
 	}
 
-	cert, err := s.client.CacheManagedCertificate(req.DnsName)
+	cert, err := s.client.CacheManagedCertificate(ctx, req.DnsName)
 
 	if err != nil {
 		log.Warnf("[%s] Could not obtain certificate from ACME: %v", req.DnsName, err)
@@ -225,7 +239,7 @@ func logClient(ctx context.Context, operation string) {
 	}
 }
 
-func createStorage(dataDirectory string) certmagic.Storage {
+func createLocalStorage(dataDirectory string) certmagic.Storage {
 	storage := &certmagic.FileStorage{Path: dataDirectory}
 	log.Infof("Using directory %s for storage", storage)
 
