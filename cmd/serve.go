@@ -57,7 +57,7 @@ var serveCmd = &cobra.Command{
 		//	PrintErrorAndExit(errors.New("renewal threshold can't exceed 60 days"))
 		//}
 
-		server.StartServer(&c, UserAgent())
+		server.StartServer(&c, UserAgent(), zapLogger)
 		log.Infof("Listening on port %v", c.Port)
 	},
 }

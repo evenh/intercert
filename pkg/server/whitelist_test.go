@@ -7,7 +7,7 @@ import (
 )
 
 func TestSimpleCase(t *testing.T) {
-	w := NewWhitelist([]string{"github.com", "evenh.net"})
+	w := newWhitelist([]string{"github.com", "evenh.net"})
 
 	err := w.isDNSNameAllowed("evenh.net")
 	assert.NoError(t, err)
@@ -26,7 +26,7 @@ func TestSimpleCase(t *testing.T) {
 }
 
 func TestEmptyDomainList(t *testing.T) {
-	w := NewWhitelist([]string{})
+	w := newWhitelist([]string{})
 
 	err := w.isDNSNameAllowed("google.com")
 
@@ -34,7 +34,7 @@ func TestEmptyDomainList(t *testing.T) {
 }
 
 func TestInvalidTopLevel(t *testing.T) {
-	w := NewWhitelist([]string{"irrelevant"})
+	w := newWhitelist([]string{"irrelevant"})
 
 	err := w.isDNSNameAllowed("bar")
 
@@ -43,7 +43,7 @@ func TestInvalidTopLevel(t *testing.T) {
 }
 
 func TestNoMatchInWhitelist(t *testing.T) {
-	w := NewWhitelist([]string{"github.com", "evenh.net"})
+	w := newWhitelist([]string{"github.com", "evenh.net"})
 
 	err := w.isDNSNameAllowed("foo.com")
 	assert.Error(t, err)

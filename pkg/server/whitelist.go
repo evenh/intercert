@@ -1,22 +1,24 @@
 package server
 
 import (
+	"context"
 	"errors"
 	"strings"
 
 	"github.com/bobesa/go-domain-util/domainutil"
-	"github.com/go-acme/lego/v4/log"
+	"go.uber.org/zap"
 )
 
-// Whitelist holds valid domains that certificates can be
+// whitelist holds valid domains that certificates can be
 // issued under.
-type Whitelist struct {
+type whitelist struct {
 	// The top level domains to allow
 	domains []string
+	logger  *zap.Logger
 }
 
-// NewWhitelist creates a new instance of the Whitelist struct
-func NewWhitelist(domains []string) Whitelist {
+// newWhitelist creates a new instance of the whitelist struct
+func newWhitelist(domains []string, logger *zap.Logger) *whitelist {
 	lowercasedDomains := make([]string, len(domains))
 
 	for i, v := range domains {
@@ -24,17 +26,20 @@ func NewWhitelist(domains []string) Whitelist {
 	}
 
 	if len(lowercasedDomains) == 0 {
-		log.Warnf("No domains in whitelist - every domain is allowed")
+		logger.Warn("no domains in whitelist - every domain is allowed")
 	} else {
-		log.Infof("Loaded whitelist: %v", lowercasedDomains)
+		logger.Info("loaded whitelist", zap.Strings("domains", lowercasedDomains))
 	}
 
-	return Whitelist{domains: lowercasedDomains}
+	return &whitelist{
+		domains: lowercasedDomains,
+		logger:  logger,
+	}
 }
 
 // Checks whether a DNS name (e.g. foo.bar.com) is allowed. If no domains is configured,
 // every DNS name will be allowed.
-func (w Whitelist) isDNSNameAllowed(dnsName string) error {
+func (w *whitelist) isDNSNameAllowed(_ context.Context, dnsName string) error {
 	// Empty whitelists allows everything
 	if len(w.domains) == 0 {
 		return nil
@@ -43,8 +48,7 @@ func (w Whitelist) isDNSNameAllowed(dnsName string) error {
 	topLevel := domainutil.Domain(dnsName)
 
 	if topLevel == "" {
-		return errors.New("Could not check whether " + dnsName + " is allowed")
-
+		return errors.New("could not check whether " + dnsName + " is allowed")
 	}
 
 	for _, domain := range w.domains {

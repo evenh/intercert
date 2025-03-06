@@ -5,18 +5,17 @@ import (
 	"crypto"
 	"crypto/ecdsa"
 	"crypto/rsa"
-	"errors"
-	"fmt"
-	"sort"
-	"time"
-
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/pem"
+	"errors"
+	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/evenh/intercert/pkg/config"
 	"github.com/evenh/intercert/pkg/dnsprovider"
+	"go.uber.org/zap"
 
 	"github.com/caddyserver/certmagic"
 	api "github.com/evenh/intercert/pkg/api/v1alpha1"
@@ -25,28 +24,33 @@ import (
 	"google.golang.org/grpc/peer"
 )
 
+var (
+	renewalEvents = make(chan string)
+)
+
 // IssuerService issues certificates to clients
 type IssuerService struct {
 	api.UnimplementedCertificateIssuerServiceServer
 	client        *certmagic.Config
-	whitelist     Whitelist
-	renewalEvents chan string
+	renewalEvents *chan string
+	logger        *zap.Logger
 }
 
 // NewIssuerService constructs a new instance with a predefined config
-func NewIssuerService(config *config.ServerConfig, userAgent string) *IssuerService {
+func NewIssuerService(config *config.ServerConfig, userAgent string, logger *zap.Logger) *IssuerService {
 	certmagic.UserAgent = userAgent
-
-	issuer := new(IssuerService)
-	issuer.renewalEvents = make(chan string)
+	issuerLogger := logger.Named("issuer")
+	cmLogger := issuerLogger.Named("certmagic")
 
 	dnsProvider, err := dnsprovider.GetProvider(config.DNSProvider)
+	w := newWhitelist(config.Domains, issuerLogger.Named("whitelist"))
 
 	if err != nil {
-		log.Fatalf("Could not configure DNS provider: %v", err)
+		issuerLogger.Fatal("Could not configure DNS provider", zap.Error(err))
 	}
 
 	certmagicConfig := &certmagic.Config{
+		Logger: cmLogger,
 		Issuers: []certmagic.Issuer{
 			&certmagic.ACMEIssuer{
 				CA:                      config.Directory,
@@ -57,12 +61,12 @@ func NewIssuerService(config *config.ServerConfig, userAgent string) *IssuerServ
 				DNS01Solver: &certmagic.DNS01Solver{
 					DNSManager: certmagic.DNSManager{
 						DNSProvider: dnsProvider,
+						Logger:      cmLogger.Named("dnsprovider"),
 						//TTL:                0,
 						//PropagationDelay:   0,
 						//PropagationTimeout: 0,
 						//Resolvers:          nil,
 						//OverrideDomain:     "",
-						// Logger:             nil, TODO
 					},
 				},
 			},
@@ -70,11 +74,13 @@ func NewIssuerService(config *config.ServerConfig, userAgent string) *IssuerServ
 
 		MustStaple: false,
 		Storage:    createLocalStorage(config.Storage),
-
+		OnDemand: &certmagic.OnDemandConfig{
+			DecisionFunc: w.isDNSNameAllowed,
+		},
 		OnEvent: func(ctx context.Context, eventName string, data map[string]any) error {
 			// For now, we'll only care about certificates that are renewed
 			if eventName == "cert_obtaining" && data["renewal"] == true {
-				issuer.renewalEvents <- fmt.Sprintf("%s", data["name"])
+				renewalEvents <- fmt.Sprintf("%s", data["name"])
 			}
 
 			return nil
@@ -84,20 +90,22 @@ func NewIssuerService(config *config.ServerConfig, userAgent string) *IssuerServ
 	// Construct the new certmagic instance
 	magic := certmagic.New(certmagic.NewCache(certmagic.CacheOptions{
 		RenewCheckInterval: config.ExpiryCheckAt,
-		OCSPCheckInterval:  1 * time.Hour,
+		Logger:             cmLogger,
 		GetConfigForCert: func(certificate certmagic.Certificate) (*certmagic.Config, error) {
 			return certmagicConfig, nil
 		},
 	}), *certmagicConfig)
 
-	issuer.client = magic
+	issuer := &IssuerService{
+		renewalEvents: &renewalEvents,
+		client:        magic,
+		logger:        issuerLogger,
+	}
 
-	// Create our whitelist
-	whitelist := NewWhitelist(config.Domains)
-	issuer.whitelist = whitelist
-
-	log.Infof("Using ACME directory: %s", config.Directory)
-	log.Infof("Certificate issuer service configured")
+	issuerLogger.Info("certificate issuer service configured",
+		zap.String("acme_directory", config.Directory),
+		zap.String("storage_path", config.Storage),
+	)
 
 	return issuer
 }
@@ -107,46 +115,40 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.IssueCertRequest)
 	// TODO: Validate auth in context
 	logClient(ctx, "IssueCert("+req.DnsName+")")
 
-	log.Infof("[%s] Received certificate request from client", req.DnsName)
+	reqLog := s.logger.With(zap.String("dns_name", req.DnsName))
 
-	// Check whitelist
-	err := s.whitelist.isDNSNameAllowed(req.DnsName)
-
-	if err != nil {
-		log.Warnf("[%s] Request rejected: %v", req.DnsName, err)
-		return nil, err
-	}
+	reqLog.Info("received certificate request")
 
 	// Hand over to certmagic
 	// TODO: Consider ManageAsync
-	err = s.client.ManageSync(ctx, []string{req.DnsName})
+	err := s.client.ManageSync(ctx, []string{req.DnsName})
 
 	if err != nil {
-		log.Warnf("[%s] Failed to obtain certificate: %v", req.DnsName, err)
+		reqLog.Warn("failed to obtain certificate", zap.Error(err))
 		return nil, err
 	}
 
 	cert, err := s.client.CacheManagedCertificate(ctx, req.DnsName)
 
 	if err != nil {
-		log.Warnf("[%s] Could not obtain certificate from ACME: %v", req.DnsName, err)
-		return nil, errors.New("Could not obtain certificate from ACME")
+		reqLog.Warn("could not obtain certificate from ACME", zap.Error(err))
+		return nil, errors.New("could not obtain certificate from ACME")
 	}
 
 	// PEM-encode private key
 	privateKey, err := pemEncodeKey(cert.PrivateKey)
 
 	if err != nil {
-		log.Warnf("[%s] Could not decode private key: %v", req.DnsName, err)
-		return nil, errors.New("Could not decode private key")
+		reqLog.Warn("could not decode private key", zap.Error(err))
+		return nil, errors.New("could not decode private key")
 	}
 
 	// PEM-encode cert chain
 	pemCert, err := pemEncodeCerts(cert.Certificate)
 
 	if err != nil {
-		log.Warnf("[%s] Could not PEM encode certificates: %v", req.DnsName, err)
-		return nil, errors.New("Could not PEM encode certificates")
+		reqLog.Warn("could not PEM encode certificates", zap.Error(err))
+		return nil, errors.New("could not PEM encode certificates")
 	}
 
 	response := &api.IssueCertResponse{
@@ -155,7 +157,7 @@ func (s IssuerService) IssueCert(ctx context.Context, req *api.IssueCertRequest)
 		Names:       cert.Names,
 	}
 
-	log.Infof("[%s] Responding to client with certificate and private key", req.DnsName)
+	reqLog.Info("responding to client with certificate and private key")
 
 	return response, nil
 }
@@ -173,17 +175,17 @@ func (s IssuerService) OnCertificateRenewal(req *api.OnCertificateRenewalRequest
 	names := req.DnsNames
 	sort.Strings(names)
 
-	for event := range s.renewalEvents {
+	for event := range *s.renewalEvents {
 		for _, name := range names {
 			if strings.ToLower(name) == strings.ToLower(event) {
 				err := res.Send(&api.OnCertificateRenewalResponse{DnsName: event})
 
 				if err != nil {
-					log.Warnf("[%s] Could not send renewal event to clients", name)
+					s.logger.Warn("could not send renewal event to clients", zap.String("dns_name", name), zap.Error(err))
 					return err
 				}
 
-				log.Infof("[%s] Notified clients that certificate has been renewed", name)
+				s.logger.Info("notified clients that certificate has been renewed", zap.String("dns_name", name))
 			}
 		}
 	}
@@ -230,6 +232,7 @@ func pemEncodeCerts(cert tls.Certificate) (string, error) {
 	return strings.Join(certificates, ""), nil
 }
 
+// TODO: Middleware
 func logClient(ctx context.Context, operation string) {
 	md, mdOK := metadata.FromIncomingContext(ctx)
 	peerInfo, pOK := peer.FromContext(ctx)
@@ -241,7 +244,6 @@ func logClient(ctx context.Context, operation string) {
 
 func createLocalStorage(dataDirectory string) certmagic.Storage {
 	storage := &certmagic.FileStorage{Path: dataDirectory}
-	log.Infof("Using directory %s for storage", storage)
 
 	return storage
 }

@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"runtime"
 
+	"github.com/evenh/intercert/pkg/logging"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 var (
@@ -17,6 +19,8 @@ var (
 	Version string
 	// Commit is the git commit used to build this version
 	Commit string
+
+	zapLogger *zap.Logger
 )
 
 var rootCmd = &cobra.Command{
@@ -27,6 +31,7 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	cobra.OnInitialize(initConfig)
+	zapLogger = logging.ConfigureLogging(true) // TODO: Make configurable
 }
 
 func initConfig() {
